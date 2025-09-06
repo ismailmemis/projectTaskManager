@@ -1,18 +1,25 @@
 package com.taskmanager.infrastructure.persistance;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "projects")
 public class ProjectEntity {
 
+    // Getters/Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 255)
+    @Column()
     private String name;
 
     @Column(length = 4096)
@@ -23,6 +30,9 @@ public class ProjectEntity {
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskEntity> tasks = new ArrayList<>();
 
     protected ProjectEntity() {
     }
@@ -36,43 +46,27 @@ public class ProjectEntity {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
+    @PrePersist
+    void onCreate() {
+        OffsetDateTime now = OffsetDateTime.now();
+        if (createdAt == null) createdAt = now;
+        if (updatedAt == null) updatedAt = now;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @PreUpdate
+    void onUpdate() {
+        updatedAt = OffsetDateTime.now();
     }
 
-    public String getName() {
-        return name;
+    // Convenience-Methoden
+    public void addTask(TaskEntity t) {
+        tasks.add(t);
+        t.setProject(this);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void removeTask(TaskEntity t) {
+        tasks.remove(t);
+        t.setProject(null);
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(OffsetDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public OffsetDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(OffsetDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

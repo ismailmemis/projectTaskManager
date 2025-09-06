@@ -3,9 +3,8 @@ package com.taskmanager.application.service;
 import com.taskmanager.application.port.ProjectPort;
 import com.taskmanager.application.port.ProjectRepositoryPort;
 import com.taskmanager.infrastructure.persistance.ProjectEntity;
-import com.taskmanager.model.CreateProjectDTO;
-import com.taskmanager.model.ProjectDTO;
-import com.taskmanager.model.UpdateProjectDTO;
+import com.taskmanager.infrastructure.persistance.TaskEntity;
+import com.taskmanager.model.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +23,12 @@ public class ProjectService implements ProjectPort {
     }
 
     @Override
-    public Optional<ProjectDTO> getById(Long id) {
+    public Optional<ProjectDTO> findById(Long id) {
         return repo.findById(id).map(e -> mapper.map(e, ProjectDTO.class));
     }
 
     @Override
-    public List<ProjectDTO> list() {
+    public List<ProjectDTO> findAll() {
         if (repo.findAll().isPresent()) {
             var entities = repo.findAll().get(); // List<ProjectEntity>
             var dtos = new java.util.ArrayList<ProjectDTO>();
@@ -76,5 +75,41 @@ public class ProjectService implements ProjectPort {
         if (repo.findById(id).isEmpty()) return false;
         repo.deleteById(id);
         return true;
+    }
+
+    @Override
+    public TaskDTO createTaskInProject(Long projectId, CreateTaskDTO createTaskDTO) {
+        var project = repo.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Project not found: " + projectId));
+        var savedTask = new TaskEntity();
+        savedTask.setTitle(createTaskDTO.getTitle());
+        savedTask.setDescription(createTaskDTO.getDescription());
+
+        var status = createTaskDTO.getStatus() != null
+                ? TaskEntity.TaskStatus.valueOf(createTaskDTO.getStatus().name())
+                : TaskEntity.TaskStatus.OFFEN;
+
+        savedTask.setStatus(status);
+
+        savedTask.setProject(project);
+        var now = java.time.OffsetDateTime.now();
+        savedTask.setCreatedAt(now);
+        savedTask.setUpdatedAt(now);
+
+        project.addTask(savedTask);
+        repo.save(project);
+
+        var taskDto = new TaskDTO();
+        taskDto.setTitle(savedTask.getTitle());
+        taskDto.setId(savedTask.getId() == null ? null : Math.toIntExact(savedTask.getId()));
+        taskDto.setTitle(savedTask.getTitle());
+        taskDto.setDescription(savedTask.getDescription());
+        taskDto.setStatus(TaskStatusDTO.valueOf(savedTask.getStatus().name()));
+        taskDto.setProjectId(savedTask.getProject().getId() == null ? null : Math.toIntExact(savedTask.getProject().getId()));
+        taskDto.setCreatedAt(savedTask.getCreatedAt());
+        taskDto.setUpdatedAt(savedTask.getUpdatedAt());
+        return taskDto;
+
+
     }
 }
