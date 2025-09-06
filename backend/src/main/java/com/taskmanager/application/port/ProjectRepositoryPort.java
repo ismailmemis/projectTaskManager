@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ProjectRepositoryPort {
     Optional<ProjectEntity> findById(Long id);
 
-    List<ProjectEntity> findAll();
+    Optional<List<ProjectEntity>> findAll();
 
     ProjectEntity save(ProjectEntity entity);
 }

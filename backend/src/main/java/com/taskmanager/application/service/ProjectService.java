@@ -1,0 +1,73 @@
+package com.taskmanager.application.service;
+
+import com.taskmanager.application.port.ProjectPort;
+import com.taskmanager.application.port.ProjectRepositoryPort;
+import com.taskmanager.infrastructure.persistance.ProjectEntity;
+import com.taskmanager.model.CreateProjectDTO;
+import com.taskmanager.model.ProjectDTO;
+import com.taskmanager.model.UpdateProjectDTO;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ProjectService implements ProjectPort {
+
+    private final ProjectRepositoryPort repo;
+    private final ModelMapper mapper;
+
+    public ProjectService(ProjectRepositoryPort repo, ModelMapper mapper) {
+        this.repo = repo;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public Optional<ProjectDTO> getById(Long id) {
+        return repo.findById(id).map(e -> mapper.map(e, ProjectDTO.class));
+    }
+
+    @Override
+    public List<ProjectDTO> list() {
+        if (repo.findAll().isPresent()) {
+            var entities = repo.findAll().get(); // List<ProjectEntity>
+            var dtos = new java.util.ArrayList<ProjectDTO>();
+            for (var e : entities) {
+                ProjectDTO d = new ProjectDTO();
+                d.setId(e.getId() == null ? null : Math.toIntExact(e.getId())); // Long -> Integer
+                d.setName(e.getName());
+                d.setDescription(e.getDescription());
+                d.setCreatedAt(e.getCreatedAt());
+                d.setUpdatedAt(e.getUpdatedAt());
+                dtos.add(d);
+            }
+            return dtos;
+        } else {
+            return List.of();
+        }
+    }
+
+    @Override
+    public ProjectDTO create(CreateProjectDTO dto) {
+        System.out.println("drin in create");
+        ProjectEntity entity = mapper.map(dto, ProjectEntity.class);
+        var now = java.time.OffsetDateTime.now();
+        entity.setCreatedAt(now);
+        entity.setUpdatedAt(now);
+        var saved = repo.save(entity);
+        return mapper.map(saved, ProjectDTO.class);
+    }
+
+    @Override
+    public ProjectDTO update(Long id, UpdateProjectDTO update) {
+        var entity = repo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Project not found: " + id));
+        if (update.getName() != null) entity.setName(update.getName());
+        if (update.getDescription() != null) entity.setDescription(update.getDescription());
+        var now = java.time.OffsetDateTime.now();
+        entity.setUpdatedAt(now);
+        var saved = repo.save(entity);
+        return mapper.map(saved, ProjectDTO.class);
+    }
+}

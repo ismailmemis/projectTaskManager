@@ -28,6 +28,12 @@ paths:
       operationId: createProject
       tags:
         - Project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProject'
       responses:
         '200':
           description: Erfolgreiche Antwort
@@ -69,7 +75,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: long
       requestBody:
         required: true
         content:

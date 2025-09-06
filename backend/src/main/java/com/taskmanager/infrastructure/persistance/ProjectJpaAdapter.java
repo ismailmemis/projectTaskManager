@@ -1,4 +1,3 @@
-// src/main/java/com/taskmanager/infrastructure/persistance/ProjectJpaAdapter.java
 package com.taskmanager.infrastructure.persistance;
 
 import com.taskmanager.application.port.ProjectRepositoryPort;
@@ -22,8 +21,8 @@ public class ProjectJpaAdapter implements ProjectRepositoryPort {
     }
 
     @Override
-    public List<ProjectEntity> findAll() {
-        return jpa.findAll(); // falls ListCrudRepository, sonst in List kopieren
+    public Optional<List<ProjectEntity>> findAll() {
+        return Optional.of(jpa.findAll());
     }
 
     @Override
