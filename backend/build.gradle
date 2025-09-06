@@ -34,6 +34,7 @@ dependencies {
     implementation 'org.springframework.session:spring-session-jdbc'
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9"
     implementation("org.openapitools:jackson-databind-nullable:0.2.7")
+    implementation("org.modelmapper:modelmapper:3.2.4")
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -49,18 +50,25 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+tasks.register('cleanOpenApiOutput', Delete) {
+    delete("$buildDir/generated-sources/openapi")
+    delete("$buildDir/generated-sources/openapi/.openapi-generator")
+}
+
 tasks.named('openApiGenerate') {
+    dependsOn 'cleanOpenApiOutput'
     generatorName = "spring"
     inputSpec = "$rootDir/src/main/resources/static/TasksAPI.yaml".replace('\\', '/')
     outputDir = "$buildDir/generated-sources/openapi"
     apiPackage = "com.taskmanager.api"
     modelPackage = "com.taskmanager.model"
     invokerPackage = "com.taskmanager"
+    modelNameSuffix = "DTO"
     configOptions = [
-            dateLibrary: "java8",
-            interfaceOnly: "true",
-            useSpringBoot3: "true",
-            useBeanValidation: "true",
+            dateLibrary         : "java8",
+            interfaceOnly       : "true",
+            useSpringBoot3      : "true",
+            useBeanValidation   : "true",
             skipDefaultInterface: "true"
     ]
     doLast {

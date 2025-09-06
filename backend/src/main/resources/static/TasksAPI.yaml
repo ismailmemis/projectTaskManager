@@ -34,9 +34,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/Project'
 
   /project/{id}:
     get:
@@ -50,7 +48,7 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: long
       responses:
         '200':
           description: Erfolgreiche Antwort
@@ -89,6 +87,7 @@ paths:
 components:
   schemas:
     Project:
+      title: Project
       type: object
       properties:
         id:
@@ -104,6 +103,7 @@ components:
           type: string
           format: date-time
     CreateProject:
+      title: CreateProject
       type: object
       properties:
         name:
@@ -111,6 +111,7 @@ components:
         description:
           type: string
     TaskStatus:
+      title: TaskStatus
       type: string
       description: Status einer Aufgabe
       enum:
@@ -118,6 +119,7 @@ components:
         - IN_BEARBEITUNG
         - ERLEDIGT
     Task:
+      title: Task
       type: object
       properties:
         id:
@@ -137,6 +139,7 @@ components:
           type: string
           format: date-time
     CreateTask:
+      title: CreateTask
       type: object
       properties:
         title:
@@ -148,6 +151,7 @@ components:
         projectId:
           type: integer
     UpdateTask:
+      title: UpdateTask
       type: object
       properties:
         title:
@@ -159,6 +163,7 @@ components:
         projectId:
           type: integer
     User:
+      title: User
       type: object
       properties:
         id:
@@ -171,6 +176,7 @@ components:
           type: string
           format: date-time
     UpdateProject:
+      title: UpdateProject
       type: object
       properties:
         name:
