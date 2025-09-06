@@ -89,6 +89,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
+    delete:
+      summary: Projekt löschen
+      description: Löscht ein Projekt anhand der ID.
+      operationId: deleteProject
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: long
+      responses:
+        '200':
+          description: Erfolgreich gelöscht
+
 
 components:
   schemas:

@@ -11,4 +11,6 @@ public interface ProjectRepositoryPort {
     Optional<List<ProjectEntity>> findAll();
 
     ProjectEntity save(ProjectEntity entity);
+
+    void deleteById(Long id);
 }

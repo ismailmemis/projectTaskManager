@@ -15,4 +15,6 @@ public interface ProjectPort {
     ProjectDTO create(CreateProjectDTO dto);
 
     ProjectDTO update(Long id, UpdateProjectDTO update);
+
+    boolean deleteById(Long id);
 }

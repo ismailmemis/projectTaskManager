@@ -70,4 +70,11 @@ public class ProjectService implements ProjectPort {
         var saved = repo.save(entity);
         return mapper.map(saved, ProjectDTO.class);
     }
+
+    @Override
+    public boolean deleteById(Long id) {
+        if (repo.findById(id).isEmpty()) return false;
+        repo.deleteById(id);
+        return true;
+    }
 }

@@ -29,4 +29,10 @@ public class ProjectJpaAdapter implements ProjectRepositoryPort {
     public ProjectEntity save(ProjectEntity entity) {
         return jpa.save(entity);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        jpa.findById(id).ifPresent(jpa::delete);
+    }
+
 }
