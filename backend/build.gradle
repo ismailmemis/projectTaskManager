@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.5'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.openapi.generator' version '7.15.0'
 }
 
 group = 'com.application'
@@ -31,6 +32,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'org.springframework.session:spring-session-jdbc'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9"
+    implementation("org.openapitools:jackson-databind-nullable:0.2.7")
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -39,8 +42,40 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('openApiGenerate') {
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/static/TasksAPI.yaml".replace('\\', '/')
+    outputDir = "$buildDir/generated-sources/openapi"
+    apiPackage = "com.taskmanager.api"
+    modelPackage = "com.taskmanager.model"
+    invokerPackage = "com.taskmanager"
+    configOptions = [
+            dateLibrary: "java8",
+            interfaceOnly: "true",
+            useSpringBoot3: "true",
+            useBeanValidation: "true",
+            skipDefaultInterface: "true"
+    ]
+    doLast {
+        println("OpenAPI Code wurde generiert.")
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "$buildDir/generated-sources/openapi/src/main/java"
+        }
+    }
+}
+
+compileJava {
+
 }

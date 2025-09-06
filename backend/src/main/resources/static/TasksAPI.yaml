@@ -1,0 +1,183 @@
+openapi: 3.1.0
+info:
+  title: TaskManager API
+  description: API zur Verwaltung von Aufgaben
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /project:
+    get:
+      summary: Liste aller Projekte
+      description: Liefert eine Liste aller vorhandenen Projekte.
+      operationId: listProjects
+      tags:
+        - Project
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+    post:
+      summary: Erstellt ein neues Projekt
+      description: Erstellt ein neues Projekt
+      operationId: createProject
+      tags:
+        - Project
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Project'
+
+  /project/{id}:
+    get:
+      summary: Einzelnes Projekt abrufen
+      description: Liefert ein Projekt anhand seiner ID.
+      operationId: getProjectById
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '404':
+          description: Projekt nicht gefunden
+    put:
+      summary: Projekt aktualisieren
+      description: Aktualisiert ein bestehendes Projekt anhand seiner ID.
+      operationId: updateProject
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProject'
+      responses:
+        '200':
+          description: Erfolgreiche Aktualisierung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateProject:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    TaskStatus:
+      type: string
+      description: Status einer Aufgabe
+      enum:
+        - OFFEN
+        - IN_BEARBEITUNG
+        - ERLEDIGT
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: TaskStatus
+        projectId:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateTask:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: TaskStatus
+        projectId:
+          type: integer
+    UpdateTask:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: TaskStatus
+        projectId:
+          type: integer
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    UpdateProject:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+
+
+
