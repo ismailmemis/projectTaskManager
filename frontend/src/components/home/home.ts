@@ -6,9 +6,15 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-home',
   imports: [ButtonModule],
   templateUrl: './home.html',
-  styleUrl: './home.scss',
+  styleUrls: ['./home.scss'],
   standalone: true
 })
 export class Home {
+
+  constructor(){}
+
+  onCheckButtonClick() {
+    console.log("check clicked"); 
+  }
 
 }

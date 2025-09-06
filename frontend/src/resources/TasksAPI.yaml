@@ -1,0 +1,284 @@
+openapi: 3.1.0
+info:
+  title: TaskManager API
+  description: API zur Verwaltung von Aufgaben
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /project:
+    get:
+      summary: Liste aller Projekte
+      description: Liefert eine Liste aller vorhandenen Projekte.
+      operationId: listProjects
+      tags:
+        - Project
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+    post:
+      summary: Erstellt ein neues Projekt
+      description: Erstellt ein neues Projekt
+      operationId: createProject
+      tags:
+        - Project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProject'
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+
+  /project/{id}:
+    get:
+      summary: Einzelnes Projekt abrufen
+      description: Liefert ein Projekt anhand seiner ID.
+      operationId: getProjectById
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: long
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '404':
+          description: Projekt nicht gefunden
+    put:
+      summary: Projekt aktualisieren
+      description: Aktualisiert ein bestehendes Projekt anhand seiner ID.
+      operationId: updateProject
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: long
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProject'
+      responses:
+        '200':
+          description: Erfolgreiche Aktualisierung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+    delete:
+      summary: Projekt löschen
+      description: Löscht ein Projekt anhand der ID.
+      operationId: deleteProject
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: long
+      responses:
+        '200':
+          description: Erfolgreich gelöscht
+
+
+  # Einzelne Aufgabe bearbeiten/anzeigen/löschen
+  /tasks/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer, format: int64 }
+    put:
+      summary: Aufgabe aktualisieren
+      operationId: updateTask
+      tags: [ Task ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateTask' }
+      responses:
+        '200':
+          description: Erfolgreiche Aktualisierung
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '404': { description: Aufgabe nicht gefunden }
+    get:
+      summary: Aufgabe abrufen
+      operationId: getTaskById
+      tags: [ Task ]
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '404': { description: Aufgabe nicht gefunden }
+
+    delete:
+      summary: Aufgabe löschen
+      operationId: deleteTask
+      tags: [ Task ]
+      responses:
+        '204': { description: Erfolgreich gelöscht }
+        '404': { description: Aufgabe nicht gefunden }
+
+
+  # Aufgaben unter einem Projekt erstellen
+  /project/{projectId}/tasks:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: integer, format: int64 }
+    post:
+      summary: Aufgabe in Projekt anlegen
+      operationId: createTaskInProject
+      tags: [ Task ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateTask' }
+      responses:
+        '201':
+          description: Aufgabe erstellt
+          headers:
+            Location:
+              description: URI der neu erstellten Aufgabe
+              schema: { type: string, format: uri }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '400': { description: Ungültige Anfrage }
+
+
+components:
+  schemas:
+    Project:
+      title: Project
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateProject:
+      title: CreateProject
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    TaskStatus:
+      title: TaskStatus
+      type: string
+      description: Status einer Aufgabe
+      enum:
+        - OFFEN
+        - IN_BEARBEITUNG
+        - ERLEDIGT
+    Task:
+      title: Task
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: TaskStatus
+        projectId:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateTask:
+      title: CreateTask
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: TaskStatus
+        projectId:
+          type: integer
+    UpdateTask:
+      title: UpdateTask
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: TaskStatus
+        projectId:
+          type: integer
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    UpdateProject:
+      title: UpdateProject
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+
+
+
