@@ -46,7 +46,7 @@ public class TaskEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
+    
     @PrePersist
     void onCreate() {
         OffsetDateTime now = OffsetDateTime.now();
