@@ -5,8 +5,6 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Project } from '../../api/models';
 import { Router } from '@angular/router';
-
-
 @Component({
   selector: 'app-project',
   imports: [ButtonModule, AsyncPipe, TableModule, DatePipe],
@@ -31,7 +29,8 @@ export class ProjectOverviewComponent {
   }
 
   onEditProject(project: Project) {
-
+    console.log("click"); 
+    this.router.navigate(['/projects/edit', project.id]);   
   }
 
   onViewProject(project: Project) {
