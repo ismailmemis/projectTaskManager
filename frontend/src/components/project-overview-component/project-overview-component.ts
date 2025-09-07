@@ -4,21 +4,26 @@ import { ProjectService } from '../../api/services';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Project } from '../../api/models';
+import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-project',
   imports: [ButtonModule, AsyncPipe, TableModule, DatePipe],
-  templateUrl: './project-component.html',
-  styleUrls: ['./project-component.scss'],
+  templateUrl: './project-overview-component.html',
+  styleUrls: ['./project-overview-component.scss'],
   standalone: true
 })
-export class ProjectComponent {
+export class ProjectOverviewComponent {
 
   protected readonly projects$;
 
-  constructor(private readonly projectService: ProjectService) {
+  constructor(private readonly projectService: ProjectService, private readonly router: Router) {
     this.projects$ = this.projectService.listProjects();
+  }
+
+  onCreateProject() {
+     this.router.navigate(['/projects/create']);    
   }
 
   onDeleteProject(project: Project) {
