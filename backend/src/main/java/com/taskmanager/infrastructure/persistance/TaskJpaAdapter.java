@@ -9,6 +9,12 @@ import java.util.Optional;
 @Component
 public class TaskJpaAdapter implements TaskRepositoryPort {
 
+    private final TaskRepository taskRepository;
+
+    public TaskJpaAdapter(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
     @Override
     public Optional<TaskEntity> findById(Long id) {
         return Optional.empty();
@@ -16,7 +22,8 @@ public class TaskJpaAdapter implements TaskRepositoryPort {
 
     @Override
     public Optional<List<TaskEntity>> findAll() {
-        return Optional.empty();
+        System.out.println("TaskJpaAdapter.findAll");
+        return Optional.of(taskRepository.findAll());
     }
 
     @Override

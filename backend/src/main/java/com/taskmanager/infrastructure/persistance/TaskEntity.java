@@ -22,8 +22,8 @@ public class TaskEntity {
     @Column(nullable = false, length = 32)
     private TaskStatus status = TaskStatus.OFFEN;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", nullable = false)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = true)
     private ProjectEntity project;
 
     @Column(name = "created_at", nullable = false)
@@ -35,10 +35,9 @@ public class TaskEntity {
     public TaskEntity() {
     }
 
-    public TaskEntity(Long id, String title, String description,
+    public TaskEntity(String title, String description,
                       TaskStatus status, ProjectEntity project,
                       OffsetDateTime createdAt, OffsetDateTime updatedAt) {
-        this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
@@ -46,7 +45,7 @@ public class TaskEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-    
+
     @PrePersist
     void onCreate() {
         OffsetDateTime now = OffsetDateTime.now();

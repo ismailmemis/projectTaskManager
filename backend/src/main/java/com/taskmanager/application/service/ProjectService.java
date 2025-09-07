@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,24 +17,24 @@ import java.util.Optional;
 @Service
 public class ProjectService implements ProjectPort {
 
-    private final ProjectRepositoryPort repo;
+    private final ProjectRepositoryPort projectRepositoryPort;
     private final ModelMapper mapper;
 
-    public ProjectService(ProjectRepositoryPort repo, ModelMapper mapper) {
-        this.repo = repo;
+    public ProjectService(ProjectRepositoryPort projectRepositoryPort, ModelMapper mapper) {
+        this.projectRepositoryPort = projectRepositoryPort;
         this.mapper = mapper;
     }
 
     @Override
     public Optional<ProjectDTO> findById(Long id) {
-        return repo.findById(id).map(e -> mapper.map(e, ProjectDTO.class));
+        return projectRepositoryPort.findById(id).map(e -> mapper.map(e, ProjectDTO.class));
     }
 
     @Override
     public List<ProjectDTO> findAll() {
-        if (repo.findAll().isPresent()) {
-            var entities = repo.findAll().get(); // List<ProjectEntity>
-            var dtos = new java.util.ArrayList<ProjectDTO>();
+        if (projectRepositoryPort.findAll().isPresent()) {
+            var entities = projectRepositoryPort.findAll().get(); // List<ProjectEntity>
+            var dtos = new ArrayList<ProjectDTO>();
             for (var e : entities) {
                 ProjectDTO d = new ProjectDTO();
                 d.setId(e.getId() == null ? null : Math.toIntExact(e.getId())); // Long -> Integer
@@ -57,32 +58,32 @@ public class ProjectService implements ProjectPort {
         var now = java.time.OffsetDateTime.now();
         entity.setCreatedAt(now);
         entity.setUpdatedAt(now);
-        var saved = repo.save(entity);
+        var saved = projectRepositoryPort.save(entity);
         return mapper.map(saved, ProjectDTO.class);
     }
 
     @Override
     public ProjectDTO update(Long id, UpdateProjectDTO update) {
-        var entity = repo.findById(id)
+        var entity = projectRepositoryPort.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Project not found: " + id));
         if (update.getName() != null) entity.setName(update.getName());
         if (update.getDescription() != null) entity.setDescription(update.getDescription());
         var now = java.time.OffsetDateTime.now();
         entity.setUpdatedAt(now);
-        var saved = repo.save(entity);
+        var saved = projectRepositoryPort.save(entity);
         return mapper.map(saved, ProjectDTO.class);
     }
 
     @Override
     public boolean deleteById(Long id) {
-        if (repo.findById(id).isEmpty()) return false;
-        repo.deleteById(id);
+        if (projectRepositoryPort.findById(id).isEmpty()) return false;
+        projectRepositoryPort.deleteById(id);
         return true;
     }
 
     @Override
     public TaskDTO createTaskInProject(Long projectId, CreateTaskDTO createTaskDTO) {
-        var project = repo.findById(projectId)
+        var project = projectRepositoryPort.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Project not found: " + projectId));
         var savedTask = new TaskEntity();
         savedTask.setTitle(createTaskDTO.getTitle());
@@ -100,7 +101,7 @@ public class ProjectService implements ProjectPort {
         savedTask.setUpdatedAt(now);
 
         project.addTask(savedTask);
-        repo.save(project);
+        projectRepositoryPort.save(project);
 
         var taskDto = new TaskDTO();
         taskDto.setTitle(savedTask.getTitle());

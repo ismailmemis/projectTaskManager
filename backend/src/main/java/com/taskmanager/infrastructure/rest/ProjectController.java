@@ -2,7 +2,9 @@ package com.taskmanager.infrastructure.rest;
 
 import com.taskmanager.api.ProjectApi;
 import com.taskmanager.application.port.ProjectPort;
-import com.taskmanager.model.*;
+import com.taskmanager.model.CreateProjectDTO;
+import com.taskmanager.model.ProjectDTO;
+import com.taskmanager.model.UpdateProjectDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,11 +47,5 @@ public class ProjectController implements ProjectApi {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @Override
-    public ResponseEntity<TaskDTO> createTaskInProject(Long projectId, CreateTaskDTO createTaskDTO) {
-        TaskDTO created = port.createTaskInProject(projectId, createTaskDTO);
-        return ResponseEntity.ok(created);
     }
 }

@@ -3,6 +3,7 @@ package com.taskmanager.infrastructure.bootstrap;
 import com.taskmanager.infrastructure.persistance.ProjectEntity;
 import com.taskmanager.infrastructure.persistance.ProjectRepository;
 import com.taskmanager.infrastructure.persistance.TaskEntity;
+import com.taskmanager.infrastructure.persistance.TaskRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,31 +15,48 @@ import java.util.List;
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner initProjects(ProjectRepository projectRepository) {
+    CommandLineRunner initProjects(ProjectRepository projectRepository, TaskRepository taskRepository) {
         return args -> {
             OffsetDateTime now = OffsetDateTime.now();
 
             // Projekte anlegen
-            var p1 = new ProjectEntity(null, "Projekt 1", "Erstes Projekt", now.minusDays(5), now.minusDays(5));
-            var p2 = new ProjectEntity(null, "Projekt 2", "Zweites Projekt", now.minusDays(4), now.minusDays(4));
-            var p3 = new ProjectEntity(null, "Projekt 3", "Drittes Projekt", now.minusDays(3), now.minusDays(3));
+            var p1 = new ProjectEntity("Projekt 1", "Erstes Projekt", now.minusDays(5), now.minusDays(5));
+            var p2 = new ProjectEntity("Projekt 2", "Zweites Projekt", now.minusDays(4), now.minusDays(4));
+            var p3 = new ProjectEntity("Projekt 3", "Drittes Projekt", now.minusDays(3), now.minusDays(3));
 
-            // Tasks erzeugen und eindeutig zuordnen (jede Task genau 1 Projekt)
-            p1.addTask(new TaskEntity(null, "Analyse", "Scope klären",
-                    TaskEntity.TaskStatus.OFFEN, p1, now.minusDays(5), now.minusDays(5)));
-            p1.addTask(new TaskEntity(null, "Implementierung", "Feature A",
-                    TaskEntity.TaskStatus.IN_BEARBEITUNG, p1, now.minusDays(4), now.minusDays(2)));
 
-            p2.addTask(new TaskEntity(null, "Testing", "Unit & Integration",
-                    TaskEntity.TaskStatus.OFFEN, p2, now.minusDays(3), now.minusDays(3)));
-            p2.addTask(new TaskEntity(null, "Dokumentation", "Readme/Guides",
-                    TaskEntity.TaskStatus.ERLEDIGT, p2, now.minusDays(2), now.minusDays(1)));
+            var t1 = new TaskEntity("Analyse", "Scope klären",
+                    TaskEntity.TaskStatus.OFFEN, p1, now.minusDays(5), now.minusDays(5));
+            var t2 = new TaskEntity("Implementierung", "Feature A",
+                    TaskEntity.TaskStatus.IN_BEARBEITUNG, p1, now.minusDays(4), now.minusDays(2));
+            var t3 = new TaskEntity("Testing", "Unit & Integration",
+                    TaskEntity.TaskStatus.OFFEN, p2, now.minusDays(3), now.minusDays(3));
+            var t4 = new TaskEntity("Dokumentation", "Readme/Guides",
+                    TaskEntity.TaskStatus.ERLEDIGT, p2, now.minusDays(2), now.minusDays(1));
+            var t5 = new TaskEntity("CI-Setup", "Build-Pipeline",
+                    TaskEntity.TaskStatus.OFFEN, p3, now.minusDays(1), now.minusDays(1));
 
-            p3.addTask(new TaskEntity(null, "CI-Setup", "Build-Pipeline",
-                    TaskEntity.TaskStatus.OFFEN, p3, now.minusDays(1), now.minusDays(1)));
+            // Aufgaben ohne Projekt
+            var t6 = new TaskEntity("Research", "Neue Technologien evaluieren",
+                    TaskEntity.TaskStatus.OFFEN, null, now.minusDays(7), now.minusDays(6));
+            var t7 = new TaskEntity("Refactoring", "Codequalität verbessern",
+                    TaskEntity.TaskStatus.IN_BEARBEITUNG, null, now.minusDays(2), now.minusDays(1));
+            var t8 = new TaskEntity("Brainstorming", "Ideen für nächstes Release sammeln",
+                    TaskEntity.TaskStatus.ERLEDIGT, null, now.minusDays(10), now.minusDays(8));
 
-            // Persistieren – Cascade.ALL in ProjectEntity sorgt fürs Mitspeichern der Tasks
+
+            p1.addTask(t1);
+            p1.addTask(t2);
+
+            p2.addTask(t3);
+            p2.addTask(t4);
+
+            p3.addTask(t5);
             projectRepository.saveAll(List.of(p1, p2, p3));
+
+            taskRepository.saveAll(List.of(t1, t2, t3, t4, t5, t6, t7, t8));
+
+
         };
     }
 }

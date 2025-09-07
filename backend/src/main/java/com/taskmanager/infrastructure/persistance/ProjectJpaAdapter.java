@@ -9,30 +9,30 @@ import java.util.Optional;
 @Component
 public class ProjectJpaAdapter implements ProjectRepositoryPort {
 
-    private final ProjectRepository jpa; // Spring Data
+    private final ProjectRepository projectRepository; // Spring Data
 
-    public ProjectJpaAdapter(ProjectRepository jpa) {
-        this.jpa = jpa;
+    public ProjectJpaAdapter(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
     }
 
     @Override
     public Optional<ProjectEntity> findById(Long id) {
-        return jpa.findById(id);
+        return projectRepository.findById(id);
     }
 
     @Override
     public Optional<List<ProjectEntity>> findAll() {
-        return Optional.of(jpa.findAll());
+        return Optional.of(projectRepository.findAll());
     }
 
     @Override
     public ProjectEntity save(ProjectEntity entity) {
-        return jpa.save(entity);
+        return projectRepository.save(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-        jpa.findById(id).ifPresent(jpa::delete);
+        projectRepository.findById(id).ifPresent(projectRepository::delete);
     }
 
 }

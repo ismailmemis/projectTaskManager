@@ -7,6 +7,8 @@ import com.taskmanager.model.UpdateTaskDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class TaskController implements TasksApi {
 
@@ -23,6 +25,11 @@ public class TaskController implements TasksApi {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @Override
+    public ResponseEntity<List<TaskDTO>> getAllTasks() {
+        return ResponseEntity.ok(taskPort.findAll());
     }
 
     @Override

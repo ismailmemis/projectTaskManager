@@ -1,7 +1,10 @@
 @let projects = (projects$ | async) ?? [];
 
 
-<h2>Projekte</h2>
+<div class="flex justify-content-between align-items-center" style="min-width: 50rem; margin-bottom: 0.5rem;">
+    <h2>Projekte</h2>
+    <button pButton icon="pi pi-folder-plus">Projekt hinzufügen</button>
+</div>
 <p-table [value]="projects" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template #header>
         <tr>

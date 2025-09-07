@@ -11,10 +11,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { createTaskInProject } from '../fn/task/create-task-in-project';
-import { CreateTaskInProject$Params } from '../fn/task/create-task-in-project';
 import { deleteTask } from '../fn/task/delete-task';
 import { DeleteTask$Params } from '../fn/task/delete-task';
+import { getAllTasks } from '../fn/task/get-all-tasks';
+import { GetAllTasks$Params } from '../fn/task/get-all-tasks';
 import { getTaskById } from '../fn/task/get-task-by-id';
 import { GetTaskById$Params } from '../fn/task/get-task-by-id';
 import { Task } from '../models/task';
@@ -25,6 +25,39 @@ import { UpdateTask$Params } from '../fn/task/update-task';
 export class TaskService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `getAllTasks()` */
+  static readonly GetAllTasksPath = '/tasks';
+
+  /**
+   * Alle Aufgaben abrufen.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllTasks()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllTasks$Response(params?: GetAllTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Task>>> {
+    return getAllTasks(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Alle Aufgaben abrufen.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllTasks$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllTasks(params?: GetAllTasks$Params, context?: HttpContext): Observable<Array<Task>> {
+    return this.getAllTasks$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Task>>): Array<Task> => r.body)
+    );
   }
 
   /** Path part for operation `getTaskById()` */
@@ -123,39 +156,6 @@ export class TaskService extends BaseService {
   deleteTask(params: DeleteTask$Params, context?: HttpContext): Observable<void> {
     return this.deleteTask$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `createTaskInProject()` */
-  static readonly CreateTaskInProjectPath = '/project/{projectId}/tasks';
-
-  /**
-   * Aufgabe in Projekt anlegen.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `createTaskInProject()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createTaskInProject$Response(params: CreateTaskInProject$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
-    return createTaskInProject(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Aufgabe in Projekt anlegen.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `createTaskInProject$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createTaskInProject(params: CreateTaskInProject$Params, context?: HttpContext): Observable<Task> {
-    return this.createTaskInProject$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Task>): Task => r.body)
     );
   }
 

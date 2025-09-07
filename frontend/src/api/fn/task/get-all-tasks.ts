@@ -8,19 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CreateTask } from '../../models/create-task';
 import { Task } from '../../models/task';
 
-export interface CreateTaskInProject$Params {
-  projectId: number;
-      body: CreateTask
+export interface GetAllTasks$Params {
 }
 
-export function createTaskInProject(http: HttpClient, rootUrl: string, params: CreateTaskInProject$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
-  const rb = new RequestBuilder(rootUrl, createTaskInProject.PATH, 'post');
+export function getAllTasks(http: HttpClient, rootUrl: string, params?: GetAllTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Task>>> {
+  const rb = new RequestBuilder(rootUrl, getAllTasks.PATH, 'get');
   if (params) {
-    rb.path('projectId', params.projectId, {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -28,9 +23,9 @@ export function createTaskInProject(http: HttpClient, rootUrl: string, params: C
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Task>;
+      return r as StrictHttpResponse<Array<Task>>;
     })
   );
 }
 
-createTaskInProject.PATH = '/project/{projectId}/tasks';
+getAllTasks.PATH = '/tasks';

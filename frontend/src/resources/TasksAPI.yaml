@@ -108,6 +108,23 @@ paths:
         '200':
           description: Erfolgreich gelöscht
 
+  #
+  /tasks:
+    get:
+      summary: Alle Aufgaben abrufen
+      operationId: getAllTasks
+      tags: [ Task ]
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '404': { description: Aufgaben nicht gefunden }
+
 
   # Einzelne Aufgabe bearbeiten/anzeigen/löschen
   /tasks/{id}:
@@ -153,38 +170,6 @@ paths:
       responses:
         '204': { description: Erfolgreich gelöscht }
         '404': { description: Aufgabe nicht gefunden }
-
-
-  # Aufgaben unter einem Projekt erstellen
-  /project/{projectId}/tasks:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-    post:
-      summary: Aufgabe in Projekt anlegen
-      operationId: createTaskInProject
-      tags: [ Task ]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: '#/components/schemas/CreateTask' }
-      responses:
-        '201':
-          description: Aufgabe erstellt
-          headers:
-            Location:
-              description: URI der neu erstellten Aufgabe
-              schema: { type: string, format: uri }
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/Task' }
-        '400': { description: Ungültige Anfrage }
-
 
 components:
   schemas:
