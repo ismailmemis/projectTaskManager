@@ -5,14 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { take } from 'rxjs';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { ProjectBaseComponent } from '../common/project-base/project-base-component';
 
 @Component({
   selector: 'app-edit-project',
   standalone: true,
-  imports: [ProjectBaseComponent, CommonModule, FormsModule, ToastModule],
+  imports: [ProjectBaseComponent, CommonModule, FormsModule],
   templateUrl: './edit-project-component.html',
   styleUrl: './edit-project-component.scss',
 })
