@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ProjectService } from '../../api/services';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
+import { TableModule } from 'primeng/table';
+import { Project } from '../../api/models';
 
 
 @Component({
   selector: 'app-project',
-  imports: [ButtonModule, AsyncPipe],
+  imports: [ButtonModule, AsyncPipe, TableModule, DatePipe],
   templateUrl: './project-component.html',
   styleUrls: ['./project-component.scss'],
   standalone: true
@@ -17,6 +19,17 @@ export class ProjectComponent {
 
   constructor(private readonly projectService: ProjectService) {
     this.projects$ = this.projectService.listProjects();
-    console.log("sendet request? " + this.projects$); 
+  }
+
+  onDeleteProject(project: Project) {
+
+  }
+
+  onEditProject(project: Project) {
+
+  }
+
+  onViewProject(project: Project) {
+
   }
 }

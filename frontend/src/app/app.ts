@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MenuModule } from 'primeng/menu';
 
 @Component({
@@ -12,16 +12,20 @@ import { MenuModule } from 'primeng/menu';
 export class App {
   protected readonly title = signal('taskmanager');
 
+  constructor(private router: Router) {}
+
   protected menuItems = [
     {
       label: "Projekte", 
-      icon: "pi-folder",
-      routerLink: "/projects"
+      icon: "pi pi-folder",
+      routerLink: "/projects", 
+      routerLinkActiveOptions: { exact: false }
     }, 
     {
       label: "Aufgaben", 
-      icon: "pi-list", 
-      routerLink: "/tasks"
+      icon: "pi pi-list", 
+      routerLink: "/tasks", 
+      routerLinkActiveOptions: { exact: false }
     }
   ]
 }
