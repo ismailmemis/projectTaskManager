@@ -12,7 +12,7 @@ import { Project } from '../../models/project';
 import { UpdateProject } from '../../models/update-project';
 
 export interface UpdateProject$Params {
-  id: long;
+  id: number;
       body: UpdateProject
 }
 

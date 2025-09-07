@@ -6,5 +6,6 @@ export type { CreateProject } from './models/create-project';
 export type { CreateTask } from './models/create-task';
 export type { Project } from './models/project';
 export type { Task } from './models/task';
+export { TaskStatus } from './models/task-status';
 export type { UpdateProject } from './models/update-project';
 export type { UpdateTask } from './models/update-task';

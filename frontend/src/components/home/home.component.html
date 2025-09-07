@@ -1,0 +1,7 @@
+@let projects = projects$ | async; 
+@for(project of projects; track project) {
+    <p>{{project.name}}</p>
+}
+
+<h2>Projekte</h2>
+<p-button label="Check"/>

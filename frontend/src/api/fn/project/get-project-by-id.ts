@@ -11,7 +11,7 @@ import { RequestBuilder } from '../../request-builder';
 import { Project } from '../../models/project';
 
 export interface GetProjectById$Params {
-  id: long;
+  id: number;
 }
 
 export function getProjectById(http: HttpClient, rootUrl: string, params: GetProjectById$Params, context?: HttpContext): Observable<StrictHttpResponse<Project>> {

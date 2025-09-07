@@ -54,7 +54,8 @@ paths:
           in: path
           required: true
           schema:
-            type: long
+            type: integer
+            format: int64
       responses:
         '200':
           description: Erfolgreiche Antwort
@@ -75,7 +76,8 @@ paths:
           in: path
           required: true
           schema:
-            type: long
+            type: integer
+            format: int64
       requestBody:
         required: true
         content:
@@ -100,7 +102,8 @@ paths:
           in: path
           required: true
           schema:
-            type: long
+            type: integer
+            format: int64
       responses:
         '200':
           description: Erfolgreich gelöscht
@@ -112,7 +115,9 @@ paths:
       - name: id
         in: path
         required: true
-        schema: { type: integer, format: int64 }
+        schema:
+          type: integer
+          format: int64
     put:
       summary: Aufgabe aktualisieren
       operationId: updateTask
@@ -156,7 +161,9 @@ paths:
       - name: projectId
         in: path
         required: true
-        schema: { type: integer, format: int64 }
+        schema:
+          type: integer
+          format: int64
     post:
       summary: Aufgabe in Projekt anlegen
       operationId: createTaskInProject
@@ -224,7 +231,7 @@ components:
         description:
           type: string
         status:
-          type: TaskStatus
+          $ref: '#/components/schemas/TaskStatus'
         projectId:
           type: integer
         createdAt:
@@ -242,7 +249,7 @@ components:
         description:
           type: string
         status:
-          type: TaskStatus
+          $ref: '#/components/schemas/TaskStatus'
         projectId:
           type: integer
     UpdateTask:
@@ -254,7 +261,7 @@ components:
         description:
           type: string
         status:
-          type: TaskStatus
+          $ref: '#/components/schemas/TaskStatus'
         projectId:
           type: integer
     User:
@@ -278,7 +285,3 @@ components:
           type: string
         description:
           type: string
-
-
-
-

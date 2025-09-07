@@ -5,12 +5,14 @@ import com.taskmanager.application.port.ProjectRepositoryPort;
 import com.taskmanager.infrastructure.persistance.ProjectEntity;
 import com.taskmanager.infrastructure.persistance.TaskEntity;
 import com.taskmanager.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ProjectService implements ProjectPort {
 
@@ -41,6 +43,7 @@ public class ProjectService implements ProjectPort {
                 d.setUpdatedAt(e.getUpdatedAt());
                 dtos.add(d);
             }
+            log.info("find all projects {}", dtos);
             return dtos;
         } else {
             return List.of();

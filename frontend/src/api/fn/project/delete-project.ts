@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface DeleteProject$Params {
-  id: long;
+  id: number;
 }
 
 export function deleteProject(http: HttpClient, rootUrl: string, params: DeleteProject$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
