@@ -6,10 +6,10 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-project-base',
   imports: [CommonModule, FormsModule],
-  templateUrl: './project-base.html',
-  styleUrl: './project-base.scss'
+  templateUrl: './project-base-component.html',
+  styleUrl: './project-base-component.scss'
 })
-export class ProjectBase {
+export class ProjectBaseComponent {
   @Input() project: Project = {};
   @Input() readOnly = false;   // true = Felder sind disabled
   @Output() save = new EventEmitter<Project>();

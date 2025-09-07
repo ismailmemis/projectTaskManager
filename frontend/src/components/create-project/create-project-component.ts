@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
-import { ProjectBase } from '../common/project-base/project-base';
 import { Project } from '../../api/models';
 import { ProjectService } from '../../api/services';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { MessageService } from "primeng/api";
 import { ToastModule } from 'primeng/toast';
+import { ProjectBaseComponent } from '../common/project-base/project-base-component';
 
 
 
 @Component({
   selector: 'app-create-project',
-  imports: [ProjectBase, ToastModule],
-  templateUrl: './create-project.html',
-  styleUrl: './create-project.scss',
+  imports: [ProjectBaseComponent, ToastModule],
+  templateUrl: './create-project-component.html',
+  styleUrl: './create-project-component.scss',
   standalone: true,
 })
-export class CreateProject {
+export class CreateProjectComponent {
 
 
   constructor(private readonly projectService: ProjectService, private readonly router: Router
