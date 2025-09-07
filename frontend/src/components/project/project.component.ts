@@ -5,13 +5,13 @@ import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-project',
   imports: [ButtonModule, AsyncPipe],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  templateUrl: './project.component.html',
+  styleUrls: ['./project.component.scss'],
   standalone: true
 })
-export class Home {
+export class Project {
 
   protected readonly projects$;
 
