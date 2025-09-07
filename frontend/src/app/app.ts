@@ -15,11 +15,13 @@ export class App {
   protected menuItems = [
     {
       label: "Projekte", 
-      icon: "pi-folder"
+      icon: "pi-folder",
+      routerLink: "/projects"
     }, 
     {
       label: "Aufgaben", 
-      icon: "pi-list"
+      icon: "pi-list", 
+      routerLink: "/tasks"
     }
   ]
 }

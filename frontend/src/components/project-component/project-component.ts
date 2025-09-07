@@ -7,11 +7,11 @@ import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-project',
   imports: [ButtonModule, AsyncPipe],
-  templateUrl: './project.component.html',
-  styleUrls: ['./project.component.scss'],
+  templateUrl: './project-component.html',
+  styleUrls: ['./project-component.scss'],
   standalone: true
 })
-export class Project {
+export class ProjectComponent {
 
   protected readonly projects$;
 
