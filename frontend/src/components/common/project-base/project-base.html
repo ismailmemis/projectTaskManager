@@ -1,46 +1,25 @@
-<div class="card p-4 w-full md:w-6">
-  <h2 class="mb-3">{{ readOnly ? 'Projekt ansehen' : (project.id ? 'Projekt bearbeiten' : 'Projekt erstellen') }}</h2>
+<div class="card p-4 w-full">
+    <h2 class="mb-3">{{ readOnly ? 'Projekt ansehen' : (project.id ? 'Projekt bearbeiten' : 'Projekt erstellen') }}</h2>
 
-  <div class="p-fluid">
-    <div class="field">
-      <label for="name">Name</label>
-      <input
-        id="name"
-        type="text"
-        pInputText
-        [(ngModel)]="project.name"
-        [disabled]="readOnly"
-        placeholder="Projektname eingeben"
-      />
+    <div class="p-fluid p-grid p-nogutter p-align-start">
+        <div class="p-field p-col-12">
+            <label for="name">Name</label>
+        </div>
+        <div class="p-field p-col-12">
+            <input id="name" type="text" pInputText [(ngModel)]="project.name" [disabled]="readOnly"
+                placeholder="Projektname eingeben" />
+        </div>
+
+        <div class="p-field p-col-12">
+            <label for="description">Beschreibung</label>
+        </div>
+        <div class="p-field p-col-12">
+            <textarea id="description" pInputTextarea [(ngModel)]="project.description" [disabled]="readOnly"
+                placeholder="Projektbeschreibung eingeben" rows="4"></textarea>
+        </div>
     </div>
-
-    <div class="field">
-      <label for="description">Beschreibung</label>
-      <textarea
-        id="description"
-        pInputTextarea
-        [(ngModel)]="project.description"
-        [disabled]="readOnly"
-        placeholder="Projektbeschreibung eingeben"
-        rows="4"
-      ></textarea>
+    <div class="flex gap-2 mt-4">
+        <button *ngIf="!readOnly" pButton icon="pi pi-check" (click)="onSave()">Speichern</button>
+        <button pButton icon="pi pi-times" (click)="onCancel()">Abbrechen</button>
     </div>
-  </div>
-
-  <div class="flex gap-2 mt-4">
-    <button
-      *ngIf="!readOnly"
-      pButton
-      label="Speichern"
-      icon="pi pi-check"
-      (click)="onSave()"
-    ></button>
-    <button
-      pButton
-      label="Abbrechen"
-      class="p-button-secondary"
-      icon="pi pi-times"
-      (click)="onCancel()"
-    ></button>
-  </div>
 </div>
