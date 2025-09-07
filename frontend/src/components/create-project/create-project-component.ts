@@ -36,6 +36,6 @@ export class CreateProjectComponent {
   }
 
   onCancel() {
-    console.log('Projekt-Erstellung abgebrochen');
+    this.router.navigate(['/projects']);
   }
 }
