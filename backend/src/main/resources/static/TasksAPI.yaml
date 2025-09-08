@@ -189,6 +189,39 @@ paths:
         '404':
           description: Aufgaben nicht gefunden
 
+  /project/{projectId}/assign-task/{taskId}:
+    post:
+      summary: Eine Aufgabe einem Projekt zuweisen
+      description: Weist eine bestehende Aufgabe einem Projekt zu. Eine Aufgabe kann genau einem Projekt zugeordnet sein.
+      operationId: assignTaskToProject
+      tags:
+        - Project
+        - Task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Aufgabe erfolgreich dem Projekt zugeordnet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Projekt oder Aufgabe nicht gefunden
+        '400':
+          description: Ungültige Anfrage (z.B. Aufgabe bereits zugeordnet)
+
 components:
   schemas:
     Project:
