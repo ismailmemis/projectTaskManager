@@ -11,8 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { assignTaskToProject } from '../fn/project/assign-task-to-project';
-import { AssignTaskToProject$Params } from '../fn/project/assign-task-to-project';
 import { assignUserToTask } from '../fn/task/assign-user-to-task';
 import { AssignUserToTask$Params } from '../fn/task/assign-user-to-task';
 import { deleteTask } from '../fn/task/delete-task';
@@ -200,39 +198,6 @@ export class TaskService extends BaseService {
   getUnassignedTasks(params?: GetUnassignedTasks$Params, context?: HttpContext): Observable<Array<Task>> {
     return this.getUnassignedTasks$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Task>>): Array<Task> => r.body)
-    );
-  }
-
-  /** Path part for operation `assignTaskToProject()` */
-  static readonly AssignTaskToProjectPath = '/project/{projectId}/assign-task/{taskId}';
-
-  /**
-   * Eine Aufgabe einem Projekt zuweisen.
-   *
-   * Weist eine bestehende Aufgabe einem Projekt zu. Eine Aufgabe kann genau einem Projekt zugeordnet sein.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `assignTaskToProject()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  assignTaskToProject$Response(params: AssignTaskToProject$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
-    return assignTaskToProject(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Eine Aufgabe einem Projekt zuweisen.
-   *
-   * Weist eine bestehende Aufgabe einem Projekt zu. Eine Aufgabe kann genau einem Projekt zugeordnet sein.
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `assignTaskToProject$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  assignTaskToProject(params: AssignTaskToProject$Params, context?: HttpContext): Observable<Task> {
-    return this.assignTaskToProject$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Task>): Task => r.body)
     );
   }
 

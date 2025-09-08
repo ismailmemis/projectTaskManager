@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Project, Task } from '../../api/models';
+import { AssignTaskToProject, Project, Task } from '../../api/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService, TaskService } from '../../api/services';
-import { concatMap, from, switchMap, take, toArray } from 'rxjs';
+import { concatMap, filter, from, of, switchMap, take, toArray } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProjectBaseComponent } from '../common/project-base/project-base-component';
@@ -65,37 +65,42 @@ export class ViewProjectComponent implements OnInit {
     this.selectedTasks = [];
   }
 
-onSaveTasks() {
+  onSaveTasks() {
   if (!this.project.id) {
     console.error("Projekt-ID ist undefined");
     return;
   }
 
   from(this.selectedTasks).pipe(
-    // Für jede Task: assignTaskToProject aufrufen, nacheinander (concatMap)
-    concatMap(task => 
-      this.projectService.assignTaskToProject({ projectId: this.project.id!, taskId: task.id! })
-    ),
-    // Alle Ergebnisse als Array sammeln
-    toArray(),
-    // Nach allen Zuweisungen: Projekt neu laden
-    switchMap(() => this.projectService.getProjectById({ id: this.project.id! }).pipe(take(1))),
-    // Nach Projektladen: Unassigned Tasks neu laden
-    switchMap((proj) => {
-      this.project = proj;
-      return this.taskService.getUnassignedTasks().pipe(take(1));
-    })
+    concatMap(task => {
+      if (!task.id) return of(null);
+
+      const payload: AssignTaskToProject = {
+        projectId: this.project.id!,
+        taskId: task.id
+      };
+      return this.projectService.assignTaskToProject({ body: payload });
+    }),
+    filter(result => result !== null),
+    toArray()
   ).subscribe({
-    next: (tasks) => {
-      this.unassignedTask = tasks;
+    next: (assignedTasks) => {
+      // Direkt die lokalen Arrays aktualisieren
+      const assigned = assignedTasks.filter(Boolean) as Task[];
+      assigned.forEach(task => {
+        this.project.tasks = [...(this.project.tasks || []), task]; // Task zum Projekt hinzufügen
+        this.unassignedTask = this.unassignedTask.filter(t => t.id !== task.id); // aus unassigned entfernen
+      });
+
       this.selectedTasks = [];
       this.dialogVisible = false;
       console.log("Alle Tasks erfolgreich zugewiesen und UI aktualisiert");
     },
     error: (err) => {
-      console.error("Fehler bei der Zuweisung oder UI-Aktualisierung", err);
+      console.error("Fehler bei der Zuweisung", err);
       this.dialogVisible = false;
     }
   });
 }
+
 }

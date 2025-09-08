@@ -1,10 +1,7 @@
 package com.taskmanager.infrastructure.project;
 
 import com.taskmanager.api.ProjectApi;
-import com.taskmanager.model.CreateProjectDTO;
-import com.taskmanager.model.ProjectDTO;
-import com.taskmanager.model.TaskDTO;
-import com.taskmanager.model.UpdateProjectDTO;
+import com.taskmanager.model.*;
 import com.taskmanager.service.ProjectService;
 import com.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +18,12 @@ public class ProjectController implements ProjectApi {
     public ProjectController(ProjectService projectPort, TaskService taskService) {
         this.projectService = projectPort;
         this.taskService = taskService;
+    }
+
+    @Override
+    public ResponseEntity<TaskDTO> assignTaskToProject(AssignTaskToProjectDTO assignTaskToProjectDTO) {
+        TaskDTO task = projectService.assignTaskToProject(assignTaskToProjectDTO);
+        return ResponseEntity.ok(task);
     }
 
     @Override
@@ -50,18 +53,6 @@ public class ProjectController implements ProjectApi {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
-        }
-    }
-
-    @Override
-    public ResponseEntity<TaskDTO> assignTaskToProject(Long projectId, Long taskId) {
-        try {
-            TaskDTO assignedTask = projectService.createTaskInProject(projectId, taskId);
-            return ResponseEntity.ok(assignedTask);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(null); // Projekt oder Aufgabe nicht gefunden
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(null); // Aufgabe bereits zugeordnet
         }
     }
 }

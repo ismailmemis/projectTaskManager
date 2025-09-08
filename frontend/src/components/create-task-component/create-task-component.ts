@@ -28,6 +28,9 @@ export class CreateTaskComponent {
     console.log("create task on save"); 
     console.log("task: ", this.task); 
     this.task.status = TaskStatus.Offen; 
+    if(!this.task.title || !this.task.description){
+      return; 
+    }
   }
 
 }

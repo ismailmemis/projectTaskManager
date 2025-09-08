@@ -3,10 +3,7 @@ package com.taskmanager.service;
 import com.taskmanager.infrastructure.project.ProjectEntity;
 import com.taskmanager.infrastructure.project.ProjectRepository;
 import com.taskmanager.infrastructure.task.TaskRepository;
-import com.taskmanager.model.CreateProjectDTO;
-import com.taskmanager.model.ProjectDTO;
-import com.taskmanager.model.TaskDTO;
-import com.taskmanager.model.UpdateProjectDTO;
+import com.taskmanager.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -104,5 +101,14 @@ public class ProjectService {
 
         return mapper.map(savedTask, TaskDTO.class);
 
+    }
+
+    public TaskDTO assignTaskToProject(AssignTaskToProjectDTO assignTaskToProjectDTO) {
+        var project = projectRepository.findById(assignTaskToProjectDTO.getProjectId().longValue()).orElse(null);
+        var task = taskRepository.findById(assignTaskToProjectDTO.getTaskId().longValue()).orElse(null);
+
+        project.addTask(task);
+        projectRepository.save(project);
+        return mapper.map(task, TaskDTO.class);
     }
 }

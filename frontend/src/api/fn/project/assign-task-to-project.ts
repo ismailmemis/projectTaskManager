@@ -8,18 +8,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { AssignTaskToProject } from '../../models/assign-task-to-project';
 import { Task } from '../../models/task';
 
 export interface AssignTaskToProject$Params {
-  projectId: number;
-  taskId: number;
+      body: AssignTaskToProject
 }
 
 export function assignTaskToProject(http: HttpClient, rootUrl: string, params: AssignTaskToProject$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
   const rb = new RequestBuilder(rootUrl, assignTaskToProject.PATH, 'post');
   if (params) {
-    rb.path('projectId', params.projectId, {});
-    rb.path('taskId', params.taskId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -32,4 +31,4 @@ export function assignTaskToProject(http: HttpClient, rootUrl: string, params: A
   );
 }
 
-assignTaskToProject.PATH = '/project/{projectId}/assign-task/{taskId}';
+assignTaskToProject.PATH = '/project/assignTask';

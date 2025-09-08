@@ -198,7 +198,7 @@ export class ProjectService extends BaseService {
   }
 
   /** Path part for operation `assignTaskToProject()` */
-  static readonly AssignTaskToProjectPath = '/project/{projectId}/assign-task/{taskId}';
+  static readonly AssignTaskToProjectPath = '/project/assignTask';
 
   /**
    * Eine Aufgabe einem Projekt zuweisen.
@@ -208,7 +208,7 @@ export class ProjectService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `assignTaskToProject()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   assignTaskToProject$Response(params: AssignTaskToProject$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
     return assignTaskToProject(this.http, this.rootUrl, params, context);
@@ -222,7 +222,7 @@ export class ProjectService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `assignTaskToProject$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   assignTaskToProject(params: AssignTaskToProject$Params, context?: HttpContext): Observable<Task> {
     return this.assignTaskToProject$Response(params, context).pipe(
