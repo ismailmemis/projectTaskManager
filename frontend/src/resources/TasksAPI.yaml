@@ -171,6 +171,24 @@ paths:
         '204': { description: Erfolgreich gelöscht }
         '404': { description: Aufgabe nicht gefunden }
 
+  /tasks/unassigned:
+    get:
+      summary: Alle Aufgaben ohne Projekt abrufen
+      description: Liefert eine Liste aller Aufgaben, die keinem Projekt zugeordnet sind.
+      operationId: getUnassignedTasks
+      tags: [ Task ]
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '404':
+          description: Aufgaben nicht gefunden
+
 components:
   schemas:
     Project:

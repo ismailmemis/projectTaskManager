@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-project-base',
-  imports: [CommonModule, FormsModule, InputText, TextareaModule],
+  imports: [CommonModule, FormsModule, InputText, TextareaModule, ButtonModule],
   templateUrl: './project-base-component.html',
   styleUrl: './project-base-component.scss', 
   standalone: true

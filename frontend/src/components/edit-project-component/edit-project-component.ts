@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { take } from 'rxjs';
 import { ProjectBaseComponent } from '../common/project-base/project-base-component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-edit-project',
   standalone: true,
-  imports: [ProjectBaseComponent, CommonModule, FormsModule],
+  imports: [ButtonModule, ProjectBaseComponent, CommonModule, FormsModule],
   templateUrl: './edit-project-component.html',
   styleUrl: './edit-project-component.scss',
 })

@@ -17,6 +17,8 @@ import { getAllTasks } from '../fn/task/get-all-tasks';
 import { GetAllTasks$Params } from '../fn/task/get-all-tasks';
 import { getTaskById } from '../fn/task/get-task-by-id';
 import { GetTaskById$Params } from '../fn/task/get-task-by-id';
+import { getUnassignedTasks } from '../fn/task/get-unassigned-tasks';
+import { GetUnassignedTasks$Params } from '../fn/task/get-unassigned-tasks';
 import { Task } from '../models/task';
 import { updateTask } from '../fn/task/update-task';
 import { UpdateTask$Params } from '../fn/task/update-task';
@@ -156,6 +158,39 @@ export class TaskService extends BaseService {
   deleteTask(params: DeleteTask$Params, context?: HttpContext): Observable<void> {
     return this.deleteTask$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getUnassignedTasks()` */
+  static readonly GetUnassignedTasksPath = '/tasks/unassigned';
+
+  /**
+   * Alle Aufgaben ohne Projekt abrufen.
+   *
+   * Liefert eine Liste aller Aufgaben, die keinem Projekt zugeordnet sind.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUnassignedTasks()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUnassignedTasks$Response(params?: GetUnassignedTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Task>>> {
+    return getUnassignedTasks(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Alle Aufgaben ohne Projekt abrufen.
+   *
+   * Liefert eine Liste aller Aufgaben, die keinem Projekt zugeordnet sind.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUnassignedTasks$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUnassignedTasks(params?: GetUnassignedTasks$Params, context?: HttpContext): Observable<Array<Task>> {
+    return this.getUnassignedTasks$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Task>>): Array<Task> => r.body)
     );
   }
 

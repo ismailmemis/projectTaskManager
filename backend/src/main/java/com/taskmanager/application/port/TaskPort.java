@@ -18,4 +18,6 @@ public interface TaskPort {
     TaskDTO update(Long id, UpdateTaskDTO dto);
 
     boolean deleteById(Long id);
+
+    Optional<List<TaskDTO>> findAllUnassignedTasks();
 }

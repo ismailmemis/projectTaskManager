@@ -41,6 +41,11 @@ public class TaskController implements TasksApi {
     }
 
     @Override
+    public ResponseEntity<List<TaskDTO>> getUnassignedTasks() {
+        return ResponseEntity.of(taskPort.findAllUnassignedTasks());
+    }
+
+    @Override
     public ResponseEntity<TaskDTO> updateTask(Long id, UpdateTaskDTO updateTaskDTO) {
         TaskDTO updated = taskPort.update(id, updateTaskDTO);
         return ResponseEntity.ok(updated);

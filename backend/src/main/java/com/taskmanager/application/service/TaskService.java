@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -65,5 +66,22 @@ public class TaskService implements TaskPort {
     @Override
     public boolean deleteById(Long id) {
         return false;
+    }
+
+    @Override
+    public Optional<List<TaskDTO>> findAllUnassignedTasks() {
+        var taskEntities = taskRepositoryPort.findAll();
+
+        if (taskEntities.isPresent()) {
+            var entities = taskEntities.get();
+            var dtos = entities.stream()
+                    .filter(e -> e.getProject() == null)
+                    .map(e -> mapper.map(e, TaskDTO.class))
+                    .collect(Collectors.toList());
+            log.info("find all unassigned tasks {}", dtos);
+            return Optional.of(dtos);
+        } else {
+            return Optional.of(List.of());
+        }
     }
 }
