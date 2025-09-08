@@ -24,6 +24,10 @@ export class TaskBaseComponent {
     "OFFEN", "IN_BEARBEITUNG", "ERLEDIGT"
   ];
 
+   /**
+   * wenn hier OnSave aufgerufen wird
+   * wird das Event weitergegeben auf die Vater Komponente --> da wo in der html <app-task-base-component> steht
+   */
   onSave() {
     this.save.emit(this.task);
   }

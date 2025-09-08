@@ -16,11 +16,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 })
 export class CreateProjectComponent {
 
-
   constructor(private readonly projectService: ProjectService, private readonly router: Router) { }
 
   onCreate(project: Project) {
-    console.log('Neues Projekt erstellen:', project);
     if (project.name && project.name.trim().length <= 0) {
       // Error handling
       return;

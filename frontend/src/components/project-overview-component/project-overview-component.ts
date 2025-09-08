@@ -18,13 +18,23 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 })
 export class ProjectOverviewComponent implements OnDestroy {
 
-  protected readonly projects$;
+  protected readonly projects$; //Observable--> wird neu geladen, wenn refreshSubject einen Wert neu emittiert 
   private readonly refreshSubject$ = new BehaviorSubject<void>(undefined);
 
   constructor(private readonly projectService: ProjectService, private readonly router: Router, private readonly confirmationService: ConfirmationService, private readonly messageService: MessageService) {
+     /**
+     * refreshSubject$: manueller Trigger dient, um die Projektliste neu zu laden.
+     * - Jeder Aufruf von refreshSubject$.next() emittiert einen neuen Wert, was ein Signal für einen Refresh darstellt.
+     *
+     * pipe(...):
+     * - Auf jeden neuen Wert von refreshSubject$ wird die Funktion im switchMap ausgeführt.
+     * - switchMap startet einen neuen Observable-Stream (listProjects)
+     * - Das Ergebnis ist ein Observable projects$, das immer den aktuellen Stand der Projektdaten liefert.
+     */
     this.projects$ = this.refreshSubject$.pipe(switchMap(() => this.projectService.listProjects()));
   }
 
+  // bei komponenten unmount den subject entfernen
   ngOnDestroy() {
     this.refreshSubject$.complete();
   }
@@ -48,10 +58,17 @@ export class ProjectOverviewComponent implements OnDestroy {
       acceptButtonProps: {
         label: 'Löschen',
       },
+      /**
+       * hat projekt eine id
+       * dann deleteproject aufrufen
+       * mit tap schaut man in den observable rein und 
+       */
       accept: () => {
         if (project.id) {
           this.projectService.deleteProject({ id: project.id }).pipe(
             tap(() => {
+              // signalisieren dass hier ein Statusupdate passiert ist --> projekt wurde gelöscht
+              // Projekte werden neu gefetcht
               this.refreshSubject$.next();
 
             })

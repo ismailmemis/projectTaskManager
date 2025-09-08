@@ -40,7 +40,6 @@ export class EditProjectComponent implements OnInit {
   }
 
   onEdit(): void {
-    console.log("this.project: ", this.project)
     this.projectService.updateProject({ id: this.project.id!, body: this.project }).pipe(take(1)).subscribe({
       next: () => {
         this.router.navigate(['/projects']);

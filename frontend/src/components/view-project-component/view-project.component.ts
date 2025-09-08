@@ -71,9 +71,10 @@ export class ViewProjectComponent implements OnInit {
       return;
     }
 
-    from(this.selectedTasks).pipe(
-      concatMap(task => {
-        if (!task.id) return of(null);
+    //rxjs
+    from(this.selectedTasks).pipe( // wandle array der ausgewählten taks in ein Observable um
+      concatMap(task => { // für jeden Task seqquentiell eine payload generieren und request aufrufen
+        if (!task.id) return of(null); //return Observable null wenn task keine id hat
 
         const payload: AssignTaskToProject = {
           projectId: this.project.id!,
@@ -84,9 +85,14 @@ export class ViewProjectComponent implements OnInit {
       filter(result => result !== null),
       toArray()
     ).subscribe({
+      // Direkte UI-Updates
       next: (assignedTasks) => {
         // Direkt die lokalen Arrays aktualisieren
         const assigned = assignedTasks.filter(Boolean) as Task[];
+        /**
+         * alle erfolgreichen Tasks dem Projekt hinzufügen
+         * diese Tasks auch aus der Liste der unassigned tasks entfernen
+         */
         assigned.forEach(task => {
           this.project.tasks = [...(this.project.tasks || []), task]; // Task zum Projekt hinzufügen
           this.unassignedTask = this.unassignedTask.filter(t => t.id !== task.id); // aus unassigned entfernen
@@ -102,5 +108,4 @@ export class ViewProjectComponent implements OnInit {
       }
     });
   }
-
 }

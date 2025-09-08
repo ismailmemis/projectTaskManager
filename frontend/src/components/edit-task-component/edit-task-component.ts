@@ -39,7 +39,6 @@ export class EditTaskComponent implements OnInit {
   }
 
   onSave(): void {
-    console.log("this.task: ", this.task)
     this.taskService.updateTask({ id: this.task.id!, body: this.task }).pipe(take(1)).subscribe({
       next: () => {
         this.router.navigate(['/tasks']);
@@ -52,5 +51,4 @@ export class EditTaskComponent implements OnInit {
   onCancel(): void {
     this.router.navigate(['/tasks']);
   }
-
 }

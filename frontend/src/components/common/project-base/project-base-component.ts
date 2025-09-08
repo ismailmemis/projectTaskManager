@@ -19,6 +19,10 @@ export class ProjectBaseComponent {
   @Output() save = new EventEmitter<Project>();
   @Output() cancel = new EventEmitter<void>();
 
+  /**
+   * wenn hier OnSave aufgerufen wird
+   * wird das Event weitergegeben auf die Vater Komponente --> da wo in der html <app-project-base> steht
+   */
   onSave() {
     this.save.emit(this.project);
   }
