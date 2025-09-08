@@ -26,7 +26,7 @@ export class TaskOverviewComponent {
     }
   
     onEditTask(task: Task) {
-      
+      this.router.navigate(['tasks/edit', task.id]); 
     }
 
     onCreateTask() {

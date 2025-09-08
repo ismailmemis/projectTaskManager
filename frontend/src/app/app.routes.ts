@@ -4,9 +4,10 @@ import { TaskOverviewComponent } from '../components/task-overview-component/tas
 import { EmptyComponent } from '../components/empty-component/empty-component';
 import { CreateProjectComponent } from '../components/create-project/create-project-component';
 import { EditProjectComponent } from '../components/edit-project-component/edit-project-component';
-import { ViewProjectComponent } from '../components/view-project/view-project.component';
+import { ViewProjectComponent } from '../components/view-project-component/view-project.component';
 import { ViewTaskComponent } from '../components/view-task-component/view-task.component';
 import { CreateTaskComponent } from '../components/create-task-component/create-task-component';
+import { EditTaskComponent } from '../components/edit-task-component/edit-task-component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: EmptyComponent },  // zeigt nichts, bis ein Menüpunkt gewählt wird
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'tasks', component: TaskOverviewComponent },
   { path: 'tasks/view/:id', component: ViewTaskComponent },
   { path: 'tasks/create', component: CreateTaskComponent },
+  { path: 'tasks/edit/:id', component: EditTaskComponent},
   { path: '**', redirectTo: '' }
 ];
