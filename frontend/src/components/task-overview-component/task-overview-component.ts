@@ -8,10 +8,10 @@ import { TableModule } from 'primeng/table';
 @Component({
   selector: 'app-task-component',
   imports: [ButtonModule, AsyncPipe, TableModule, DatePipe],
-  templateUrl: './task-component.html',
-  styleUrl: './task-component.scss'
+  templateUrl: './task-overview-component.html',
+  styleUrl: './task-overview-component.scss'
 })
-export class TaskComponent {
+export class TaskOverviewComponent {
 
   protected readonly tasks$; 
 
