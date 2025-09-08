@@ -50,6 +50,7 @@ public class ProjectController implements ProjectApi {
     @Override
     public ResponseEntity<Void> deleteProject(Long id) {
         if (projectService.deleteById(id)) {
+            
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -99,16 +98,6 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public List<UserDTO> getUnassignedUsersForTask(Long taskId) {
-        TaskEntity task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
-        Set<UserEntity> assigned = task.getUsers();
-        return userRepository.findAll().stream()
-                .filter(u -> !assigned.contains(u))
-                .map(user -> mapper.map(user, UserDTO.class))
-                .collect(Collectors.toList());
-    }
-
     public TaskDTO assignUserToTask(Long taskId, Long userId) {
         TaskEntity task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -123,5 +112,8 @@ public class TaskService {
         return mapper.map(taskRepository.save(task), TaskDTO.class);
     }
 
+    public List<TaskEntity> getTasksForProjectById(Long projectId) {
+        return this.taskRepository.findByProject_Id(projectId);
+    }
 
 }

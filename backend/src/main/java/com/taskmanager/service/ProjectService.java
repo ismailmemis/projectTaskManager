@@ -21,11 +21,13 @@ public class ProjectService {
 
     private final ModelMapper mapper;
     private final TaskRepository taskRepository;
+    private final TaskService taskService;
 
-    public ProjectService(ProjectRepository projectRepository, ModelMapper mapper, TaskRepository taskRepository) {
+    public ProjectService(ProjectRepository projectRepository, ModelMapper mapper, TaskRepository taskRepository, TaskService taskService) {
         this.projectRepository = projectRepository;
         this.mapper = mapper;
         this.taskRepository = taskRepository;
+        this.taskService = taskService;
     }
 
     public Optional<ProjectDTO> findById(Long id) {
@@ -82,6 +84,15 @@ public class ProjectService {
 
     public boolean deleteById(Long id) {
         if (projectRepository.findById(id).isEmpty()) return false;
+        this.taskRepository.saveAll(
+                taskService.getTasksForProjectById(id).stream().map(
+                        taskEntity -> {
+                            taskEntity.setProject(null);
+                            return taskEntity;
+                        }
+                ).toList()
+        );
+
         projectRepository.deleteById(id);
         return true;
     }
