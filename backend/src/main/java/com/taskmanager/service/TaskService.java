@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class TaskService {
 
-
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
@@ -30,7 +29,8 @@ public class TaskService {
         this.userRepository = userRepository;
         this.mapper = mapper;
 
-        // add custom mapping
+        // Custom Mapping für projektbezogene ID, um DTO flach zu halten
+        // Im Task wird nur die relevante ID übernommen statt das komplette Projekt Entity
         this.mapper.typeMap(TaskEntity.class, TaskDTO.class).addMappings(m -> {
             m.map(src -> src.getProject().getId(), TaskDTO::setProjectId);
         });
@@ -45,12 +45,20 @@ public class TaskService {
 
     }
 
+    /**
+     * Erstellt Task-Entity aus DTO, persistiert und mapped zurück.
+     * Sicherstellung der sofortigen Persistenz vor Rückgabe.
+     */
     public TaskDTO create(CreateTaskDTO dto) {
         TaskEntity taskEntity = mapper.map(dto, TaskEntity.class);
         taskRepository.save(taskEntity);
         return mapper.map(taskEntity, TaskDTO.class);
     }
 
+    /**
+     * Aktualisiert Task, validiert Existenz erzwingend via Exception.
+     * Nur veränderliche Felder werden überschrieben, Enum-Mapping für Status.
+     */
     public TaskDTO update(Long id, UpdateTaskDTO updateTaskDTO) {
         TaskEntity entity = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
 
@@ -61,6 +69,9 @@ public class TaskService {
         return mapper.map(taskRepository.save(entity), TaskDTO.class);
     }
 
+    /**
+     * Löscht Task nach Existenzprüfung, Rückgabe boolean als Erfolgssignal.
+     */
     public boolean deleteById(Long id) {
         if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
@@ -69,10 +80,16 @@ public class TaskService {
         return false;
     }
 
+    /**
+     * Liefert alle Tasks, die keinem Projekt zugeordnet sind, in Optional gelistet.
+     */
     public Optional<List<TaskDTO>> findAllUnassignedTasks() {
         return Optional.of(taskRepository.findByProjectIsNull().stream().map(task -> mapper.map(task, TaskDTO.class)).collect(Collectors.toList()));
     }
 
+    /**
+     * Entfernt User aus Task-Userliste, validiert beide Entitäten, persistiert Änderungen.
+     */
     public TaskDTO removeUserFromTask(Long taskId, Long userId) {
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task not found"));
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -81,11 +98,18 @@ public class TaskService {
         return mapper.map(taskRepository.save(task), TaskDTO.class);
     }
 
+    /**
+     * Listet alle User einer Task als DTOs.
+     */
     public List<UserDTO> getUsersForTask(Long taskId) {
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task not found"));
         return task.getUsers().stream().map(user -> mapper.map(user, UserDTO.class)).collect(Collectors.toList());
     }
 
+    /**
+     * Fügt User zu Task hinzu, validiert doppelte Zuweisungen zur Vorbeugung von Inkonsistenzen.
+     * Persistiert aktualisierte Task-Entity und mapped zurück.
+     */
     public TaskDTO assignUserToTask(Long taskId, Long userId) {
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task not found"));
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -98,6 +122,10 @@ public class TaskService {
         return mapper.map(taskRepository.save(task), TaskDTO.class);
     }
 
+    /**
+     * Hilfsmethode zur Ermittlung aller Tasks, die zu einem bestimmten Projekt gehören.
+     * Liefert Entities für interne Geschäftslogik, nicht gemappt.
+     */
     public List<TaskEntity> getTasksForProjectById(Long projectId) {
         return this.taskRepository.findByProject_Id(projectId);
     }

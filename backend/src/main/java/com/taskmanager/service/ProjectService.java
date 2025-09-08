@@ -30,6 +30,12 @@ public class ProjectService {
         this.taskService = taskService;
     }
 
+    /**
+     * Holt ein ProjectEntity anhand der ID und mapt es in ein ProjectDTO inklusive der zugehörigen Tasks.
+     *
+     * @param id
+     * @return
+     */
     public Optional<ProjectDTO> findById(Long id) {
         return projectRepository.findById(id).map(e -> {
             ProjectDTO dto = mapper.map(e, ProjectDTO.class);
@@ -39,6 +45,11 @@ public class ProjectService {
         });
     }
 
+    /**
+     * Liest alle Projekte aus, mapped sie manuell in DTOs und loggt das Ergebnis.
+     *
+     * @return
+     */
     public List<ProjectDTO> findAll() {
         if (!projectRepository.findAll().isEmpty()) {
             var entities = projectRepository.findAll();
@@ -59,6 +70,12 @@ public class ProjectService {
         }
     }
 
+    /**
+     * Erstellt ein neues Projekt aus DTO, setzt systemseitig Timestamps
+     *
+     * @param dto
+     * @return
+     */
     public ProjectDTO create(CreateProjectDTO dto) {
         System.out.println("drin in create");
         ProjectEntity entity = mapper.map(dto, ProjectEntity.class);
@@ -69,6 +86,13 @@ public class ProjectService {
         return mapper.map(saved, ProjectDTO.class);
     }
 
+    /**
+     * Update-Logik mit defensivem Ansatz: Nur gesetzte Felder im Update-DTO werden gesetzt
+     *
+     * @param id
+     * @param update
+     * @return
+     */
     public ProjectDTO update(Long id, UpdateProjectDTO update) {
         var entity = projectRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Project not found: " + id));
         if (update.getName() != null) entity.setName(update.getName());
@@ -79,6 +103,12 @@ public class ProjectService {
         return mapper.map(saved, ProjectDTO.class);
     }
 
+    /**
+     * Löscht ein Projekt nach Validierung der Existenz.
+     * Vor Löschung werden alle Tasks des Projekts vom Projekt entfernt (project auf null gesetzt),
+     * um referenzielle Integrität zu wahren und Inkonsistenzen zu vermeiden.
+     * Persistiert geänderte Tasks vor finalem Löschvorgang.
+     */
     public boolean deleteById(Long id) {
         if (projectRepository.findById(id).isEmpty()) return false;
         this.taskRepository.saveAll(taskService.getTasksForProjectById(id).stream().map(taskEntity -> {
@@ -90,27 +120,19 @@ public class ProjectService {
         return true;
     }
 
-    public TaskDTO createTaskInProject(Long projectId, Long taskId) {
-        var project = projectRepository.findById(projectId).orElseThrow(() -> new IllegalArgumentException("Projekt nicht gefunden: " + projectId));
-        var task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("Aufgabe nicht gefunden: " + taskId));
-
-        if (task.getProject() != null && !task.getProject().getId().equals(projectId)) {
-            throw new IllegalStateException("Aufgabe ist bereits einem anderen Projekt zugeordnet.");
-        }
-
-        task.setProject(project);
-        var savedTask = taskRepository.save(task);
-
-        return mapper.map(savedTask, TaskDTO.class);
-
-    }
-
+    /**
+     * Weist eine Task einem Projekt zu (ausgehend von DTO mit IDs).
+     *
+     * @param assignTaskToProjectDTO
+     * @return
+     */
     public TaskDTO assignTaskToProject(AssignTaskToProjectDTO assignTaskToProjectDTO) {
         var project = projectRepository.findById(assignTaskToProjectDTO.getProjectId().longValue()).orElse(null);
         var task = taskRepository.findById(assignTaskToProjectDTO.getTaskId().longValue()).orElse(null);
-
-        project.addTask(task);
-        projectRepository.save(project);
+        if (project != null && task != null) {
+            project.addTask(task);
+            projectRepository.save(project);
+        }
         return mapper.map(task, TaskDTO.class);
     }
 }

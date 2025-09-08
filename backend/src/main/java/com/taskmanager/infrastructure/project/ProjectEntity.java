@@ -32,6 +32,9 @@ public class ProjectEntity {
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
+    /**
+     * 1:n --> 1 Projekt hat mehrere Tasks
+     */
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskEntity> tasks = new ArrayList<>();
 

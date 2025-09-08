@@ -13,9 +13,22 @@ import org.springframework.context.annotation.Configuration;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+/**
+ * Diese Klasse stellt beans für die Anwendung dar.
+ */
 @Configuration
 public class DataInitializer {
 
+    /**
+     * CommandLineRunner:
+     * Die run() Methode wird ausgeführt, sobald der Spring Application Context geladen wurde.
+     * Dadurch Programmcode ausführbar, welche gewisse Beans benötigen um Aktionen zu tätigen
+     *
+     * @param projectRepository
+     * @param taskRepository
+     * @param userRepository
+     * @return
+     */
     @Bean
     CommandLineRunner initProjects(ProjectRepository projectRepository, TaskRepository taskRepository, UserRepository userRepository) {
         return args -> {
@@ -37,7 +50,7 @@ public class DataInitializer {
             var t6 = new TaskEntity("Research", "Neue Technologien evaluieren", TaskEntity.TaskStatus.OFFEN, null, now.minusDays(7), now.minusDays(6));
             var t7 = new TaskEntity("Refactoring", "Codequalität verbessern", TaskEntity.TaskStatus.IN_BEARBEITUNG, null, now.minusDays(2), now.minusDays(1));
             var t8 = new TaskEntity("Brainstorming", "Ideen für nächstes Release sammeln", TaskEntity.TaskStatus.ERLEDIGT, null, now.minusDays(10), now.minusDays(8));
-            
+
             p1.addTask(t1);
             p1.addTask(t2);
 

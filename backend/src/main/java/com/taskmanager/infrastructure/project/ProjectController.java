@@ -13,6 +13,7 @@ public class ProjectController implements ProjectApi {
 
     private final ProjectService projectService;
 
+    // constructor injection
     public ProjectController(ProjectService projectPort) {
         this.projectService = projectPort;
     }

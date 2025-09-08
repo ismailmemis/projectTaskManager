@@ -30,6 +30,10 @@ public class TaskEntity {
     @Column(nullable = false, length = 32)
     private TaskStatus status = TaskStatus.OFFEN;
 
+    /**
+     * Viele Tasks können auf 1 Projekt zuweisen
+     * FetchType.LAZY --> Projekt entity nicht sofort mitgeladen, nur wenn darauf zugegriffen wird
+     */
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = true)
     private ProjectEntity project;
@@ -40,6 +44,9 @@ public class TaskEntity {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
+    /**
+     * Task kann auf mehrere User zugewiesen sein
+     */
     @ManyToMany
     @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserEntity> users = new HashSet<>();
