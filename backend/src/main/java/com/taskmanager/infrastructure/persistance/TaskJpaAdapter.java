@@ -17,7 +17,7 @@ public class TaskJpaAdapter implements TaskRepositoryPort {
 
     @Override
     public Optional<TaskEntity> findById(Long id) {
-        return Optional.empty();
+        return taskRepository.findById(id);
     }
 
     @Override

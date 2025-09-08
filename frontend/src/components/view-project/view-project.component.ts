@@ -9,9 +9,10 @@ import { ProjectBaseComponent } from '../common/project-base/project-base-compon
 
 @Component({
   selector: 'app-view-project',
-   imports: [ProjectBaseComponent, CommonModule, FormsModule],
+  imports: [ProjectBaseComponent, CommonModule, FormsModule],
   templateUrl: './view-project.component.html',
-  styleUrl: './view-project.component.scss'
+  styleUrl: './view-project.component.scss', 
+  standalone: true
 })
 export class ViewProjectComponent  implements OnInit {
    project: Project = {};

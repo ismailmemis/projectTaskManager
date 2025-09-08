@@ -4,11 +4,13 @@ import com.taskmanager.api.TasksApi;
 import com.taskmanager.application.port.TaskPort;
 import com.taskmanager.model.TaskDTO;
 import com.taskmanager.model.UpdateTaskDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 public class TaskController implements TasksApi {
 
@@ -29,6 +31,7 @@ public class TaskController implements TasksApi {
 
     @Override
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
+        log.debug("REST request to get all tasks");
         return ResponseEntity.ok(taskPort.findAll());
     }
 

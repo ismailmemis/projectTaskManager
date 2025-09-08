@@ -7,7 +7,8 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-project-base',
   imports: [CommonModule, FormsModule],
   templateUrl: './project-base-component.html',
-  styleUrl: './project-base-component.scss'
+  styleUrl: './project-base-component.scss', 
+  standalone: true
 })
 export class ProjectBaseComponent {
   @Input() project: Project = {};

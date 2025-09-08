@@ -4,7 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-empty-component',
   imports: [],
   templateUrl: './empty-component.html',
-  styleUrl: './empty-component.scss'
+  styleUrl: './empty-component.scss', 
+  standalone: true
 })
 export class EmptyComponent {
 
