@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Task } from '../../../api/models';
+import { InputText } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-task-base-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, InputText, TextareaModule],
   templateUrl: './task-base-component.html',
   styleUrl: './task-base-component.scss', 
   standalone: true

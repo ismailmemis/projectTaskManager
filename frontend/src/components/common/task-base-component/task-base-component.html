@@ -14,8 +14,15 @@
             <label for="description">Beschreibung</label>
         </div>
         <div class="p-field p-col-12">
-            <textarea id="description" pInputTextarea [(ngModel)]="task.description" [disabled]="readonly"
+            <textarea id="description" pTextarea [(ngModel)]="task.description" [disabled]="readonly"
                 placeholder="Taskbeschreibung eingeben" rows="4"></textarea>
+        </div>
+        <div class="p-field p-col-12">
+            <label for="name">Status</label>
+        </div>
+        <div class="p-field p-col-12">
+            <input id="status" type="text" pInputText [(ngModel)]="task.status" [disabled]="readonly"
+                placeholder="Taskstatus" />
         </div>
     </div>
     <div class="flex gap-2 mt-4">
