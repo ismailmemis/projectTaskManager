@@ -1,5 +1,6 @@
-package com.taskmanager.infrastructure.persistance;
+package com.taskmanager.infrastructure.task;
 
+import com.taskmanager.infrastructure.project.ProjectEntity;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;

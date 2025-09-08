@@ -1,9 +1,9 @@
 package com.taskmanager.infrastructure.bootstrap;
 
-import com.taskmanager.infrastructure.persistance.ProjectEntity;
-import com.taskmanager.infrastructure.persistance.ProjectRepository;
-import com.taskmanager.infrastructure.persistance.TaskEntity;
-import com.taskmanager.infrastructure.persistance.TaskRepository;
+import com.taskmanager.infrastructure.project.ProjectEntity;
+import com.taskmanager.infrastructure.project.ProjectRepository;
+import com.taskmanager.infrastructure.task.TaskEntity;
+import com.taskmanager.infrastructure.task.TaskRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

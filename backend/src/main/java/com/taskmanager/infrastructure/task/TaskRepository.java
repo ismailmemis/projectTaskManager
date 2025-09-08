@@ -1,4 +1,4 @@
-package com.taskmanager.infrastructure.persistance;
+package com.taskmanager.infrastructure.task;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

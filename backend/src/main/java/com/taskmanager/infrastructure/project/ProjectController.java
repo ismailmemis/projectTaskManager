@@ -1,12 +1,12 @@
-package com.taskmanager.infrastructure.rest;
+package com.taskmanager.infrastructure.project;
 
 import com.taskmanager.api.ProjectApi;
-import com.taskmanager.application.port.ProjectPort;
-import com.taskmanager.application.service.TaskService;
 import com.taskmanager.model.CreateProjectDTO;
 import com.taskmanager.model.ProjectDTO;
 import com.taskmanager.model.TaskDTO;
 import com.taskmanager.model.UpdateProjectDTO;
+import com.taskmanager.service.ProjectService;
+import com.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,38 +15,38 @@ import java.util.List;
 @RestController
 public class ProjectController implements ProjectApi {
 
-    private final ProjectPort projectPort;
+    private final ProjectService projectService;
     private final TaskService taskService;
 
-    public ProjectController(ProjectPort projectPort, TaskService taskService) {
-        this.projectPort = projectPort;
+    public ProjectController(ProjectService projectPort, TaskService taskService) {
+        this.projectService = projectPort;
         this.taskService = taskService;
     }
 
     @Override
     public ResponseEntity<ProjectDTO> createProject(CreateProjectDTO createProjectDTO) {
-        return ResponseEntity.ok(projectPort.create(createProjectDTO));
+        return ResponseEntity.ok(projectService.create(createProjectDTO));
     }
 
     @Override
     public ResponseEntity<ProjectDTO> getProjectById(Long id) {
-        return ResponseEntity.of(projectPort.findById(id));
+        return ResponseEntity.of(projectService.findById(id));
     }
 
     @Override
     public ResponseEntity<List<ProjectDTO>> listProjects() {
-        return ResponseEntity.ok(projectPort.findAll());
+        return ResponseEntity.ok(projectService.findAll());
     }
 
     @Override
     public ResponseEntity<ProjectDTO> updateProject(Long id, UpdateProjectDTO updateProjectDTO) {
-        ProjectDTO updated = projectPort.update(id, updateProjectDTO);
+        ProjectDTO updated = projectService.update(id, updateProjectDTO);
         return ResponseEntity.ok(updated);
     }
 
     @Override
     public ResponseEntity<Void> deleteProject(Long id) {
-        if (projectPort.deleteById(id)) {
+        if (projectService.deleteById(id)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -55,16 +55,13 @@ public class ProjectController implements ProjectApi {
 
     @Override
     public ResponseEntity<TaskDTO> assignTaskToProject(Long projectId, Long taskId) {
-        var project = projectPort.findById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("Projekt nicht gefunden: " + projectId));
-        var task = taskService.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("Aufgabe nicht gefunden: " + taskId));
-
-        if (task.getProjectId() != null && (long) task.getProjectId() != projectId) {
-            throw new IllegalStateException("Aufgabe ist bereits einem anderen Projekt zugeordnet.");
+        try {
+            TaskDTO assignedTask = projectService.createTaskInProject(projectId, taskId);
+            return ResponseEntity.ok(assignedTask);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(null); // Projekt oder Aufgabe nicht gefunden
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(null); // Aufgabe bereits zugeordnet
         }
-
-        task.setProjectId(project.getId());
-
     }
 }

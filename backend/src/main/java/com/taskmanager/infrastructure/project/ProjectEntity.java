@@ -1,5 +1,6 @@
-package com.taskmanager.infrastructure.persistance;
+package com.taskmanager.infrastructure.project;
 
+import com.taskmanager.infrastructure.task.TaskEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

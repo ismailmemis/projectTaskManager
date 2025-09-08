@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { assignTaskToProject } from '../fn/project/assign-task-to-project';
+import { AssignTaskToProject$Params } from '../fn/project/assign-task-to-project';
 import { createProject } from '../fn/project/create-project';
 import { CreateProject$Params } from '../fn/project/create-project';
 import { deleteProject } from '../fn/project/delete-project';
@@ -20,6 +22,7 @@ import { GetProjectById$Params } from '../fn/project/get-project-by-id';
 import { listProjects } from '../fn/project/list-projects';
 import { ListProjects$Params } from '../fn/project/list-projects';
 import { Project } from '../models/project';
+import { Task } from '../models/task';
 import { updateProject } from '../fn/project/update-project';
 import { UpdateProject$Params } from '../fn/project/update-project';
 
@@ -191,6 +194,39 @@ export class ProjectService extends BaseService {
   deleteProject(params: DeleteProject$Params, context?: HttpContext): Observable<void> {
     return this.deleteProject$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `assignTaskToProject()` */
+  static readonly AssignTaskToProjectPath = '/project/{projectId}/assign-task/{taskId}';
+
+  /**
+   * Eine Aufgabe einem Projekt zuweisen.
+   *
+   * Weist eine bestehende Aufgabe einem Projekt zu. Eine Aufgabe kann genau einem Projekt zugeordnet sein.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignTaskToProject()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignTaskToProject$Response(params: AssignTaskToProject$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
+    return assignTaskToProject(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Eine Aufgabe einem Projekt zuweisen.
+   *
+   * Weist eine bestehende Aufgabe einem Projekt zu. Eine Aufgabe kann genau einem Projekt zugeordnet sein.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `assignTaskToProject$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignTaskToProject(params: AssignTaskToProject$Params, context?: HttpContext): Observable<Task> {
+    return this.assignTaskToProject$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Task>): Task => r.body)
     );
   }
 
