@@ -66,41 +66,41 @@ export class ViewProjectComponent implements OnInit {
   }
 
   onSaveTasks() {
-  if (!this.project.id) {
-    console.error("Projekt-ID ist undefined");
-    return;
-  }
-
-  from(this.selectedTasks).pipe(
-    concatMap(task => {
-      if (!task.id) return of(null);
-
-      const payload: AssignTaskToProject = {
-        projectId: this.project.id!,
-        taskId: task.id
-      };
-      return this.projectService.assignTaskToProject({ body: payload });
-    }),
-    filter(result => result !== null),
-    toArray()
-  ).subscribe({
-    next: (assignedTasks) => {
-      // Direkt die lokalen Arrays aktualisieren
-      const assigned = assignedTasks.filter(Boolean) as Task[];
-      assigned.forEach(task => {
-        this.project.tasks = [...(this.project.tasks || []), task]; // Task zum Projekt hinzufügen
-        this.unassignedTask = this.unassignedTask.filter(t => t.id !== task.id); // aus unassigned entfernen
-      });
-
-      this.selectedTasks = [];
-      this.dialogVisible = false;
-      console.log("Alle Tasks erfolgreich zugewiesen und UI aktualisiert");
-    },
-    error: (err) => {
-      console.error("Fehler bei der Zuweisung", err);
-      this.dialogVisible = false;
+    if (!this.project.id) {
+      console.error("Projekt-ID ist undefined");
+      return;
     }
-  });
-}
+
+    from(this.selectedTasks).pipe(
+      concatMap(task => {
+        if (!task.id) return of(null);
+
+        const payload: AssignTaskToProject = {
+          projectId: this.project.id!,
+          taskId: task.id
+        };
+        return this.projectService.assignTaskToProject({ body: payload });
+      }),
+      filter(result => result !== null),
+      toArray()
+    ).subscribe({
+      next: (assignedTasks) => {
+        // Direkt die lokalen Arrays aktualisieren
+        const assigned = assignedTasks.filter(Boolean) as Task[];
+        assigned.forEach(task => {
+          this.project.tasks = [...(this.project.tasks || []), task]; // Task zum Projekt hinzufügen
+          this.unassignedTask = this.unassignedTask.filter(t => t.id !== task.id); // aus unassigned entfernen
+        });
+
+        this.selectedTasks = [];
+        this.dialogVisible = false;
+        console.log("Alle Tasks erfolgreich zugewiesen und UI aktualisiert");
+      },
+      error: (err) => {
+        console.error("Fehler bei der Zuweisung", err);
+        this.dialogVisible = false;
+      }
+    });
+  }
 
 }

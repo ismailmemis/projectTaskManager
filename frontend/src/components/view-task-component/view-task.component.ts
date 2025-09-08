@@ -11,29 +11,29 @@ import { TaskBaseComponent } from '../common/task-base-component/task-base-compo
   selector: 'app-view-task-component',
   imports: [TaskBaseComponent, CommonModule, FormsModule],
   templateUrl: './view-task.component.html',
-  styleUrl: './view-task.component.scss', 
+  styleUrl: './view-task.component.scss',
   standalone: true
 })
 export class ViewTaskComponent implements OnInit {
-  task: Task = {}; 
+  task: Task = {};
 
   constructor(
-    private readonly taskService: TaskService, 
-    private readonly route: ActivatedRoute, 
+    private readonly taskService: TaskService,
+    private readonly route: ActivatedRoute,
     private readonly router: Router
-  ) {}
+  ) { }
 
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id'); 
-    if(id) {
-      this.taskService.getTaskById({id: +id}).pipe(take(1)).subscribe({
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.taskService.getTaskById({ id: +id }).pipe(take(1)).subscribe({
         next: (task) => {
-          this.task = task; 
-        }, 
+          this.task = task;
+        },
         error: () => {
-            this.router.navigate(['/tasks']);
-          }
+          this.router.navigate(['/tasks']);
+        }
       })
     }
   }
@@ -41,5 +41,4 @@ export class ViewTaskComponent implements OnInit {
   onCancel() {
     this.router.navigate(['/tasks']);
   }
-
 }

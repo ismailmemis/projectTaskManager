@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-project-base',
   imports: [CommonModule, FormsModule, InputText, TextareaModule, ButtonModule],
   templateUrl: './project-base-component.html',
-  styleUrl: './project-base-component.scss', 
+  styleUrl: './project-base-component.scss',
   standalone: true
 })
 export class ProjectBaseComponent {

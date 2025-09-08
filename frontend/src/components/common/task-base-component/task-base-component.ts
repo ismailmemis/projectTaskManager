@@ -11,18 +11,18 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-task-base-component',
   imports: [CommonModule, FormsModule, InputText, TextareaModule, SelectModule, ButtonModule],
   templateUrl: './task-base-component.html',
-  styleUrl: './task-base-component.scss', 
+  styleUrl: './task-base-component.scss',
   standalone: true
 })
 export class TaskBaseComponent {
-  @Input() task: Task = {}; 
+  @Input() task: Task = {};
   @Input() readonly = false; // true = Felder sind disabled
   @Output() save = new EventEmitter<Task>();
   @Output() cancel = new EventEmitter<void>();
 
   statusOptions = [
     "OFFEN", "IN_BEARBEITUNG", "ERLEDIGT"
-  ]; 
+  ];
 
   onSave() {
     this.save.emit(this.task);

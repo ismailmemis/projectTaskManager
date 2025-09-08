@@ -20,17 +20,17 @@ import { BehaviorSubject, switchMap, tap } from 'rxjs';
 export class TaskOverviewComponent implements OnDestroy {
 
   protected readonly tasks$;
-  private readonly refreshSubject$ = new BehaviorSubject<void>(undefined); 
+  private readonly refreshSubject$ = new BehaviorSubject<void>(undefined);
 
   constructor(private readonly taskService: TaskService, private readonly router: Router, private readonly confirmationService: ConfirmationService, private readonly messageService: MessageService) {
-    this.tasks$ = this.refreshSubject$.pipe(switchMap(() => this.taskService.getAllTasks())); 
+    this.tasks$ = this.refreshSubject$.pipe(switchMap(() => this.taskService.getAllTasks()));
   }
   ngOnDestroy() {
-    this.refreshSubject$.complete(); 
+    this.refreshSubject$.complete();
   }
 
   onDeleteTask(task: Task) {
-     this.confirmationService.confirm({
+    this.confirmationService.confirm({
       message: 'Möchten sie die Task löschen?',
       header: 'Task löschen',
       closable: true,
@@ -45,19 +45,19 @@ export class TaskOverviewComponent implements OnDestroy {
         label: 'Löschen',
       },
       accept: () => {
-        if(task.id){
-          this.taskService.deleteTask({id: task.id}).pipe(
+        if (task.id) {
+          this.taskService.deleteTask({ id: task.id }).pipe(
             tap(() => {
-              this.refreshSubject$.next(); 
-              
+              this.refreshSubject$.next();
+
             })
           ).subscribe(() => {
             this.messageService.add({
-                severity: 'success',
-                summary: 'Erfolg',
-                detail: 'Task wurde gelöscht',
-                life: 3000,
-              });
+              severity: 'success',
+              summary: 'Erfolg',
+              detail: 'Task wurde gelöscht',
+              life: 3000,
+            });
           })
         }
       },

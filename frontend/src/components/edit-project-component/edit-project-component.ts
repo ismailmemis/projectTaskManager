@@ -23,7 +23,7 @@ export class EditProjectComponent implements OnInit {
     private readonly projectService: ProjectService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

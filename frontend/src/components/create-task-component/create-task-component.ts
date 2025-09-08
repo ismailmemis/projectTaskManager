@@ -15,7 +15,7 @@ import { take } from 'rxjs';
 })
 export class CreateTaskComponent {
 
-  task: Task = {}; 
+  task: Task = {};
 
   constructor(private readonly taskService: TaskService, private readonly router: Router) {
 
@@ -26,22 +26,20 @@ export class CreateTaskComponent {
   }
 
   onSave() {
-    console.log("create task on save"); 
-    console.log("task: ", this.task); 
-    this.task.status = TaskStatus.Offen; 
-    if(!this.task.title || !this.task.description){
-      return; 
+    console.log("create task on save");
+    console.log("task: ", this.task);
+    this.task.status = TaskStatus.Offen;
+    if (!this.task.title || !this.task.description) {
+      return;
     }
-    this.taskService.createNewTask({body: this.task}).pipe(take(1)).subscribe({
+    this.taskService.createNewTask({ body: this.task }).pipe(take(1)).subscribe({
       next: (response) => {
         this.router.navigate(['/tasks']);
-      }, 
-        error: (error) => {
+      },
+      error: (error) => {
         console.error('Fehler beim Erstellen des Projekts:', error);
         // Hier kann z.B. eine Fehlermeldung angezeigt werden
       }
-    }); 
-     
+    });
   }
-
 }
