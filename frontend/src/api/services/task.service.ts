@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { assignUserToTask } from '../fn/task/assign-user-to-task';
 import { AssignUserToTask$Params } from '../fn/task/assign-user-to-task';
+import { createNewTask } from '../fn/task/create-new-task';
+import { CreateNewTask$Params } from '../fn/task/create-new-task';
 import { deleteTask } from '../fn/task/delete-task';
 import { DeleteTask$Params } from '../fn/task/delete-task';
 import { getAllTasks } from '../fn/task/get-all-tasks';
@@ -66,6 +68,39 @@ export class TaskService extends BaseService {
   getAllTasks(params?: GetAllTasks$Params, context?: HttpContext): Observable<Array<Task>> {
     return this.getAllTasks$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Task>>): Array<Task> => r.body)
+    );
+  }
+
+  /** Path part for operation `createNewTask()` */
+  static readonly CreateNewTaskPath = '/tasks';
+
+  /**
+   * Erstellt eine Aufgabe.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createNewTask()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createNewTask$Response(params: CreateNewTask$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
+    return createNewTask(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Erstellt eine Aufgabe.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createNewTask$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createNewTask(params: CreateNewTask$Params, context?: HttpContext): Observable<Task> {
+    return this.createNewTask$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Task>): Task => r.body)
     );
   }
 

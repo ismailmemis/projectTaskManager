@@ -108,7 +108,8 @@ paths:
         '200':
           description: Erfolgreich gelöscht
 
-  #
+  #Aufgaben
+
   /tasks:
     get:
       summary: Alle Aufgaben abrufen
@@ -124,6 +125,25 @@ paths:
                 items:
                   $ref: '#/components/schemas/Task'
         '404': { description: Aufgaben nicht gefunden }
+    post:
+      summary: Erstellt eine Aufgabe
+      operationId: createNewTask
+      tags: [ Task ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTask'
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404': { description: Aufgaben konnte nicht erstellt werden }
+
 
 
   # Einzelne Aufgabe bearbeiten/anzeigen/löschen
@@ -362,8 +382,6 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/TaskStatus'
-        projectId:
-          type: integer
     UpdateTask:
       title: UpdateTask
       type: object

@@ -4,6 +4,7 @@
 
 export type { AssignTaskToProject } from './models/assign-task-to-project';
 export type { CreateProject } from './models/create-project';
+export type { CreateTask } from './models/create-task';
 export type { Project } from './models/project';
 export type { Task } from './models/task';
 export { TaskStatus } from './models/task-status';

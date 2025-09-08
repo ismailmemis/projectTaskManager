@@ -49,7 +49,9 @@ public class TaskService {
     }
 
     public TaskDTO create(CreateTaskDTO dto) {
-        return null;
+        TaskEntity taskEntity = mapper.map(dto, TaskEntity.class);
+        taskRepository.save(taskEntity);
+        return mapper.map(taskEntity, TaskDTO.class);
     }
 
     public TaskDTO update(Long id, UpdateTaskDTO updateTaskDTO) {

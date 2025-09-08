@@ -1,6 +1,7 @@
 package com.taskmanager.infrastructure.task;
 
 import com.taskmanager.api.TasksApi;
+import com.taskmanager.model.CreateTaskDTO;
 import com.taskmanager.model.TaskDTO;
 import com.taskmanager.model.UpdateTaskDTO;
 import com.taskmanager.model.UserDTO;
@@ -25,6 +26,12 @@ public class TaskController implements TasksApi {
     public ResponseEntity<TaskDTO> assignUserToTask(Long taskId, Long userId) {
         return ResponseEntity.ok(taskService.assignUserToTask(taskId, userId));
     }
+
+    @Override
+    public ResponseEntity<TaskDTO> createNewTask(CreateTaskDTO createTaskDTO) {
+        return ResponseEntity.ok(taskService.create(createTaskDTO));
+    }
+
 
     @Override
     public ResponseEntity<Void> deleteTask(Long id) {

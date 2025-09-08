@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../api/services';
 import { Router } from '@angular/router';
 import { Task, TaskStatus } from '../../api/models';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-create-task-component',
@@ -31,6 +32,16 @@ export class CreateTaskComponent {
     if(!this.task.title || !this.task.description){
       return; 
     }
+    this.taskService.createNewTask({body: this.task}).pipe(take(1)).subscribe({
+      next: (response) => {
+        this.router.navigate(['/tasks']);
+      }, 
+        error: (error) => {
+        console.error('Fehler beim Erstellen des Projekts:', error);
+        // Hier kann z.B. eine Fehlermeldung angezeigt werden
+      }
+    }); 
+     
   }
 
 }
