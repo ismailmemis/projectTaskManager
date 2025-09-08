@@ -34,7 +34,7 @@ export class ProjectOverviewComponent {
   }
 
   onViewProject(project: Project) {
-    console.log("view clocked"); 
+    console.log("view clicked"); 
     this.router.navigate(['/projects/view', project.id]);   
   }
 }

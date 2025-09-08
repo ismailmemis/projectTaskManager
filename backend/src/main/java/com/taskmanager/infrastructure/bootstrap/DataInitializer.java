@@ -1,5 +1,7 @@
 package com.taskmanager.infrastructure.bootstrap;
 
+import com.taskmanager.infrastructure.User.UserEntity;
+import com.taskmanager.infrastructure.User.UserRepository;
 import com.taskmanager.infrastructure.project.ProjectEntity;
 import com.taskmanager.infrastructure.project.ProjectRepository;
 import com.taskmanager.infrastructure.task.TaskEntity;
@@ -15,7 +17,7 @@ import java.util.List;
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner initProjects(ProjectRepository projectRepository, TaskRepository taskRepository) {
+    CommandLineRunner initProjects(ProjectRepository projectRepository, TaskRepository taskRepository, UserRepository userRepository) {
         return args -> {
             OffsetDateTime now = OffsetDateTime.now();
 
@@ -55,6 +57,36 @@ public class DataInitializer {
             projectRepository.saveAll(List.of(p1, p2, p3));
 
             taskRepository.saveAll(List.of(t1, t2, t3, t4, t5, t6, t7, t8));
+
+            // Users anlegen
+            var u1 = new UserEntity();
+            u1.setName("Alice");
+
+            var u2 = new UserEntity();
+            u2.setName("Bob");
+
+            var u3 = new UserEntity();
+            u3.setName("Charlie");
+
+            var u4 = new UserEntity();
+            u4.setName("Diana");
+
+            userRepository.saveAll(List.of(u1, u2, u3, u4));
+
+            // Tasks zu Users zuweisen
+            t1.getUsers().add(u1);
+            t1.getUsers().add(u2);
+
+            t2.getUsers().add(u2);
+
+            t3.getUsers().add(u3);
+
+            t6.getUsers().add(u1);
+            t6.getUsers().add(u4);
+
+            t7.getUsers().add(u4);
+
+            taskRepository.saveAll(List.of(t1, t2, t3, t6, t7));
 
 
         };

@@ -3,6 +3,7 @@ package com.taskmanager.infrastructure.task;
 import com.taskmanager.api.TasksApi;
 import com.taskmanager.model.TaskDTO;
 import com.taskmanager.model.UpdateTaskDTO;
+import com.taskmanager.model.UserDTO;
 import com.taskmanager.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,11 @@ public class TaskController implements TasksApi {
     }
 
     @Override
+    public ResponseEntity<TaskDTO> assignUserToTask(Long taskId, Long userId) {
+        return ResponseEntity.ok(taskService.assignUserToTask(taskId, userId));
+    }
+
+    @Override
     public ResponseEntity<Void> deleteTask(Long id) {
         if (taskService.deleteById(id)) {
             return ResponseEntity.ok().build();
@@ -31,7 +37,6 @@ public class TaskController implements TasksApi {
 
     @Override
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
-        log.debug("REST request to get all tasks");
         return ResponseEntity.ok(taskService.findAll());
     }
 
@@ -46,8 +51,20 @@ public class TaskController implements TasksApi {
     }
 
     @Override
+    public ResponseEntity<List<UserDTO>> getUsersForTask(Long taskId) {
+        return ResponseEntity.ok(taskService.getUsersForTask(taskId));
+    }
+
+    @Override
+    public ResponseEntity<TaskDTO> removeUserFromTask(Long taskId, Long userId) {
+        return ResponseEntity.ok(taskService.removeUserFromTask(taskId, userId));
+    }
+
+    @Override
     public ResponseEntity<TaskDTO> updateTask(Long id, UpdateTaskDTO updateTaskDTO) {
         TaskDTO updated = taskService.update(id, updateTaskDTO);
         return ResponseEntity.ok(updated);
     }
+
+
 }

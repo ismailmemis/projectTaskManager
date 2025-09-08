@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { assignTaskToProject } from '../fn/project/assign-task-to-project';
 import { AssignTaskToProject$Params } from '../fn/project/assign-task-to-project';
+import { assignUserToTask } from '../fn/task/assign-user-to-task';
+import { AssignUserToTask$Params } from '../fn/task/assign-user-to-task';
 import { deleteTask } from '../fn/task/delete-task';
 import { DeleteTask$Params } from '../fn/task/delete-task';
 import { getAllTasks } from '../fn/task/get-all-tasks';
@@ -21,9 +23,14 @@ import { getTaskById } from '../fn/task/get-task-by-id';
 import { GetTaskById$Params } from '../fn/task/get-task-by-id';
 import { getUnassignedTasks } from '../fn/task/get-unassigned-tasks';
 import { GetUnassignedTasks$Params } from '../fn/task/get-unassigned-tasks';
+import { getUsersForTask } from '../fn/task/get-users-for-task';
+import { GetUsersForTask$Params } from '../fn/task/get-users-for-task';
+import { removeUserFromTask } from '../fn/task/remove-user-from-task';
+import { RemoveUserFromTask$Params } from '../fn/task/remove-user-from-task';
 import { Task } from '../models/task';
 import { updateTask } from '../fn/task/update-task';
 import { UpdateTask$Params } from '../fn/task/update-task';
+import { User } from '../models/user';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService extends BaseService {
@@ -225,6 +232,105 @@ export class TaskService extends BaseService {
    */
   assignTaskToProject(params: AssignTaskToProject$Params, context?: HttpContext): Observable<Task> {
     return this.assignTaskToProject$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Task>): Task => r.body)
+    );
+  }
+
+  /** Path part for operation `getUsersForTask()` */
+  static readonly GetUsersForTaskPath = '/tasks/{taskId}/users';
+
+  /**
+   * Liste aller Benutzer einer Aufgabe.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUsersForTask()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsersForTask$Response(params: GetUsersForTask$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<User>>> {
+    return getUsersForTask(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Liste aller Benutzer einer Aufgabe.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUsersForTask$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsersForTask(params: GetUsersForTask$Params, context?: HttpContext): Observable<Array<User>> {
+    return this.getUsersForTask$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<User>>): Array<User> => r.body)
+    );
+  }
+
+  /** Path part for operation `assignUserToTask()` */
+  static readonly AssignUserToTaskPath = '/tasks/{taskId}/assign-user/{userId}';
+
+  /**
+   * Benutzer einer Aufgabe zuweisen.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignUserToTask()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignUserToTask$Response(params: AssignUserToTask$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
+    return assignUserToTask(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Benutzer einer Aufgabe zuweisen.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `assignUserToTask$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignUserToTask(params: AssignUserToTask$Params, context?: HttpContext): Observable<Task> {
+    return this.assignUserToTask$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Task>): Task => r.body)
+    );
+  }
+
+  /** Path part for operation `removeUserFromTask()` */
+  static readonly RemoveUserFromTaskPath = '/tasks/{taskId}/remove-user/{userId}';
+
+  /**
+   * Benutzer von Aufgabe entfernen.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeUserFromTask()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeUserFromTask$Response(params: RemoveUserFromTask$Params, context?: HttpContext): Observable<StrictHttpResponse<Task>> {
+    return removeUserFromTask(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Benutzer von Aufgabe entfernen.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `removeUserFromTask$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeUserFromTask(params: RemoveUserFromTask$Params, context?: HttpContext): Observable<Task> {
+    return this.removeUserFromTask$Response(params, context).pipe(
       map((r: StrictHttpResponse<Task>): Task => r.body)
     );
   }

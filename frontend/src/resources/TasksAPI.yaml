@@ -221,6 +221,85 @@ paths:
           description: Projekt oder Aufgabe nicht gefunden
         '400':
           description: Ungültige Anfrage (z.B. Aufgabe bereits zugeordnet)
+  /users:
+    get:
+      summary: Liste aller Benutzer
+      operationId: listUsers
+      tags: [ User ]
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /tasks/{taskId}/users:
+    get:
+      summary: Liste aller Benutzer einer Aufgabe
+      operationId: getUsersForTask
+      tags: [ Task, User ]
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema: { type: integer, format: int64 }
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/User' }
+        '404': { description: Aufgabe nicht gefunden }
+
+  /tasks/{taskId}/assign-user/{userId}:
+    post:
+      summary: Benutzer einer Aufgabe zuweisen
+      operationId: assignUserToTask
+      tags: [ Task, User ]
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema: { type: integer, format: int64 }
+        - name: userId
+          in: path
+          required: true
+          schema: { type: integer, format: int64 }
+      responses:
+        '200':
+          description: Benutzer erfolgreich zugewiesen
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '404': { description: Benutzer oder Aufgabe nicht gefunden }
+        '400': { description: Benutzer bereits zugewiesen }
+
+  /tasks/{taskId}/remove-user/{userId}:
+    delete:
+      summary: Benutzer von Aufgabe entfernen
+      operationId: removeUserFromTask
+      tags: [ Task, User ]
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema: { type: integer, format: int64 }
+        - name: userId
+          in: path
+          required: true
+          schema: { type: integer, format: int64 }
+      responses:
+        '200':
+          description: Benutzer erfolgreich entfernt
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '404': { description: Benutzer oder Aufgabe nicht gefunden }
 
 components:
   schemas:
@@ -310,13 +389,8 @@ components:
       properties:
         id:
           type: integer
-        username:
+        name:
           type: string
-        email:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
     UpdateProject:
       title: UpdateProject
       type: object

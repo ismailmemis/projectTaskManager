@@ -1,28 +1,34 @@
 package com.taskmanager.service;
 
+import com.taskmanager.infrastructure.User.UserEntity;
+import com.taskmanager.infrastructure.User.UserRepository;
 import com.taskmanager.infrastructure.task.TaskEntity;
 import com.taskmanager.infrastructure.task.TaskRepository;
 import com.taskmanager.model.CreateTaskDTO;
 import com.taskmanager.model.TaskDTO;
 import com.taskmanager.model.UpdateTaskDTO;
+import com.taskmanager.model.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class TaskService {
 
+
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
     private final ModelMapper mapper;
 
-    public TaskService(TaskRepository taskRepository, ModelMapper mapper) {
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository, ModelMapper mapper) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
         this.mapper = mapper;
 
         // add custom mapping
@@ -36,13 +42,9 @@ public class TaskService {
     }
 
     public List<TaskDTO> findAll() {
-
-        var taskEntities = taskRepository.findAll();
-
-        var dtos = new ArrayList<TaskDTO>();
-        for (var e : taskEntities) dtos.add(mapper.map(e, TaskDTO.class));
-        log.info("find all tasks {}", dtos);
-        return dtos;
+        return taskRepository.findAll().stream()
+                .map(task -> mapper.map(task, TaskDTO.class))
+                .collect(Collectors.toList());
 
     }
 
@@ -50,24 +52,74 @@ public class TaskService {
         return null;
     }
 
-    public TaskDTO update(Long id, UpdateTaskDTO dto) {
-        return null;
+    public TaskDTO update(Long id, UpdateTaskDTO updateTaskDTO) {
+        TaskEntity entity = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        entity.setTitle(updateTaskDTO.getTitle());
+        entity.setDescription(updateTaskDTO.getDescription());
+        entity.setStatus(TaskEntity.TaskStatus.valueOf(updateTaskDTO.getStatus().name()));
+
+        return mapper.map(taskRepository.save(entity), TaskDTO.class);
     }
 
     public boolean deleteById(Long id) {
+        if (taskRepository.existsById(id)) {
+            taskRepository.deleteById(id);
+            return true;
+        }
         return false;
     }
 
     public Optional<List<TaskDTO>> findAllUnassignedTasks() {
-        var taskEntities = taskRepository.findAll();
-
-
-        var dtos = taskEntities.stream()
-                .filter(e -> e.getProject() == null)
-                .map(e -> mapper.map(e, TaskDTO.class))
-                .collect(Collectors.toList());
-        log.info("find all unassigned tasks {}", dtos);
-        return Optional.of(dtos);
+        return Optional.of(
+                taskRepository.findByProjectIsNull().stream()
+                        .map(task -> mapper.map(task, TaskDTO.class))
+                        .collect(Collectors.toList())
+        );
     }
+
+    public TaskDTO removeUserFromTask(Long taskId, Long userId) {
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        task.getUsers().remove(user);
+        return mapper.map(taskRepository.save(task), TaskDTO.class);
+    }
+
+    public List<UserDTO> getUsersForTask(Long taskId) {
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        return task.getUsers().stream()
+                .map(user -> mapper.map(user, UserDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getUnassignedUsersForTask(Long taskId) {
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        Set<UserEntity> assigned = task.getUsers();
+        return userRepository.findAll().stream()
+                .filter(u -> !assigned.contains(u))
+                .map(user -> mapper.map(user, UserDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public TaskDTO assignUserToTask(Long taskId, Long userId) {
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (task.getUsers().contains(user)) {
+            throw new RuntimeException("User already assigned to task");
+        }
+
+        task.getUsers().add(user);
+        return mapper.map(taskRepository.save(task), TaskDTO.class);
+    }
+
 
 }

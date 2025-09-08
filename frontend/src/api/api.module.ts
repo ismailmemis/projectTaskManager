@@ -8,6 +8,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { ProjectService } from './services/project.service';
 import { TaskService } from './services/task.service';
+import { UserService } from './services/user.service';
 
 /**
  * Module that provides all services and configuration.
@@ -19,6 +20,7 @@ import { TaskService } from './services/task.service';
   providers: [
     ProjectService,
     TaskService,
+    UserService,
     ApiConfiguration
   ],
 })

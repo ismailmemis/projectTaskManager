@@ -8,3 +8,4 @@ export type { Task } from './models/task';
 export { TaskStatus } from './models/task-status';
 export type { UpdateProject } from './models/update-project';
 export type { UpdateTask } from './models/update-task';
+export type { User } from './models/user';
