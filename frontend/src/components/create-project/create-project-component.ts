@@ -22,7 +22,8 @@ export class CreateProjectComponent {
   onCreate(project: Project) {
     console.log('Neues Projekt erstellen:', project);
     if (project.name && project.name.trim().length <= 0) {
-
+      // Error handling
+      return; 
     }
     this.projectService.createProject({ body: project }).pipe(take(1)).subscribe({
       next: (response) => {

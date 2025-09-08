@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../api/services';
 import { Router } from '@angular/router';
-import { Task } from '../../api/models';
+import { Task, TaskStatus } from '../../api/models';
 
 @Component({
   selector: 'app-create-task-component',
@@ -27,6 +27,7 @@ export class CreateTaskComponent {
   onSave() {
     console.log("create task on save"); 
     console.log("task: ", this.task); 
+    this.task.status = TaskStatus.Offen; 
   }
 
 }

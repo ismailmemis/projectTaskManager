@@ -3,10 +3,10 @@
 
     <div class="p-fluid p-grid p-nogutter p-align-start">
         <div class="p-field p-col-12">
-            <label for="name">Name</label>
+            <label for="titel">Titel</label>
         </div>
         <div class="p-field p-col-12">
-            <input id="name" type="text" pInputText [(ngModel)]="task.title" [disabled]="readonly"
+            <input id="titel" type="text" pInputText [(ngModel)]="task.title" [disabled]="readonly"
                 placeholder="Tasktitel eingeben" />
         </div>
 
@@ -17,18 +17,21 @@
             <textarea id="description" pTextarea [(ngModel)]="task.description" [disabled]="readonly"
                 placeholder="Taskbeschreibung eingeben" rows="4"></textarea>
         </div>
-        <div class="p-field p-col-12">
-            <label for="name">Status</label>
+        <div *ngIf="task.id">
+            <div class="p-field p-col-12">
+                <label for="name">Status</label>
+            </div>
+            <div class="p-field p-col-12">
+                <input id="status" type="text" pInputText [(ngModel)]="task.status" [disabled]="readonly"
+                    placeholder="Taskstatus" />
+            </div>
         </div>
-        <div class="p-field p-col-12">
-            <input id="status" type="text" pInputText [(ngModel)]="task.status" [disabled]="readonly"
-                placeholder="Taskstatus" />
-        </div>
+
         <div *ngIf="task.projectId">
             <div class="p-field p-col-12">
-                <label for="name">Projekt-ID</label>
+                <label for="status">Projekt-ID</label>
             </div>
-            <input  id="status" type="text" pInputText [(ngModel)]="task.projectId" [disabled]="true"
+            <input id="projectId" type="text" pInputText [(ngModel)]="task.projectId" [disabled]="true"
                 placeholder="Projekt-ID" />
         </div>
 
