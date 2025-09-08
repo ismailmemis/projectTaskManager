@@ -189,6 +189,10 @@ components:
         updatedAt:
           type: string
           format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
     CreateProject:
       title: CreateProject
       type: object

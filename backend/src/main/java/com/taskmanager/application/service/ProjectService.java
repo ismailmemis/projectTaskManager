@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,7 +28,14 @@ public class ProjectService implements ProjectPort {
 
     @Override
     public Optional<ProjectDTO> findById(Long id) {
-        return projectRepositoryPort.findById(id).map(e -> mapper.map(e, ProjectDTO.class));
+        return projectRepositoryPort.findById(id).map(e -> {
+            ProjectDTO dto = mapper.map(e, ProjectDTO.class);
+            List<TaskDTO> taskDtos = e.getTasks().stream()
+                    .map(taskEntity -> mapper.map(taskEntity, TaskDTO.class))
+                    .collect(Collectors.toList());
+            dto.setTasks(taskDtos);
+            return dto;
+        });
     }
 
     @Override
