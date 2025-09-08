@@ -6,6 +6,7 @@ import { CreateProjectComponent } from '../components/create-project/create-proj
 import { EditProjectComponent } from '../components/edit-project-component/edit-project-component';
 import { ViewProjectComponent } from '../components/view-project/view-project.component';
 import { ViewTaskComponent } from '../components/view-task-component/view-task.component';
+import { CreateTaskComponent } from '../components/create-task-component/create-task-component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: EmptyComponent },  // zeigt nichts, bis ein Menüpunkt gewählt wird
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'projects/edit/:id', component: EditProjectComponent },
   { path: 'projects/view/:id', component: ViewProjectComponent },
   { path: 'tasks', component: TaskOverviewComponent },
-  {path: 'tasks/view/:id', component: ViewTaskComponent},
+  { path: 'tasks/view/:id', component: ViewTaskComponent },
+  { path: 'tasks/create', component: CreateTaskComponent },
   { path: '**', redirectTo: '' }
 ];

@@ -28,6 +28,11 @@ export class TaskOverviewComponent {
     onEditTask(task: Task) {
       
     }
+
+    onCreateTask() {
+      console.log("onj create task"); 
+      this.router.navigate(['tasks/create']); 
+    }
   
     onViewTask(task: Task) {
       console.log("view clicked"); 

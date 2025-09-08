@@ -24,14 +24,12 @@
             <input id="status" type="text" pInputText [(ngModel)]="task.status" [disabled]="readonly"
                 placeholder="Taskstatus" />
         </div>
-        <div *ngIf="task.projectId" >
+        <div *ngIf="task.projectId">
             <div class="p-field p-col-12">
                 <label for="name">Projekt-ID</label>
             </div>
-            <div class="p-field p-col-12">
-                <input id="project" type="text" pInputText [(ngModel)]="task.projectId" [disabled]="readonly"
-                    placeholder="Projekt ID" />
-            </div>
+            <input  id="status" type="text" pInputText [(ngModel)]="task.projectId" [disabled]="true"
+                placeholder="Projekt-ID" />
         </div>
 
     </div>
