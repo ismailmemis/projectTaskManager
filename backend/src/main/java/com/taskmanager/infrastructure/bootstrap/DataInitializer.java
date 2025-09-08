@@ -27,26 +27,17 @@ public class DataInitializer {
             var p3 = new ProjectEntity("Projekt 3", "Drittes Projekt", now.minusDays(3), now.minusDays(3));
 
 
-            var t1 = new TaskEntity("Analyse", "Scope klären",
-                    TaskEntity.TaskStatus.OFFEN, p1, now.minusDays(5), now.minusDays(5));
-            var t2 = new TaskEntity("Implementierung", "Feature A",
-                    TaskEntity.TaskStatus.IN_BEARBEITUNG, p1, now.minusDays(4), now.minusDays(2));
-            var t3 = new TaskEntity("Testing", "Unit & Integration",
-                    TaskEntity.TaskStatus.OFFEN, p2, now.minusDays(3), now.minusDays(3));
-            var t4 = new TaskEntity("Dokumentation", "Readme/Guides",
-                    TaskEntity.TaskStatus.ERLEDIGT, p2, now.minusDays(2), now.minusDays(1));
-            var t5 = new TaskEntity("CI-Setup", "Build-Pipeline",
-                    TaskEntity.TaskStatus.OFFEN, p3, now.minusDays(1), now.minusDays(1));
+            var t1 = new TaskEntity("Analyse", "Scope klären", TaskEntity.TaskStatus.OFFEN, p1, now.minusDays(5), now.minusDays(5));
+            var t2 = new TaskEntity("Implementierung", "Feature A", TaskEntity.TaskStatus.IN_BEARBEITUNG, p1, now.minusDays(4), now.minusDays(2));
+            var t3 = new TaskEntity("Testing", "Unit & Integration", TaskEntity.TaskStatus.OFFEN, p2, now.minusDays(3), now.minusDays(3));
+            var t4 = new TaskEntity("Dokumentation", "Readme/Guides", TaskEntity.TaskStatus.ERLEDIGT, p2, now.minusDays(2), now.minusDays(1));
+            var t5 = new TaskEntity("CI-Setup", "Build-Pipeline", TaskEntity.TaskStatus.OFFEN, p3, now.minusDays(1), now.minusDays(1));
 
             // Aufgaben ohne Projekt
-            var t6 = new TaskEntity("Research", "Neue Technologien evaluieren",
-                    TaskEntity.TaskStatus.OFFEN, null, now.minusDays(7), now.minusDays(6));
-            var t7 = new TaskEntity("Refactoring", "Codequalität verbessern",
-                    TaskEntity.TaskStatus.IN_BEARBEITUNG, null, now.minusDays(2), now.minusDays(1));
-            var t8 = new TaskEntity("Brainstorming", "Ideen für nächstes Release sammeln",
-                    TaskEntity.TaskStatus.ERLEDIGT, null, now.minusDays(10), now.minusDays(8));
-
-
+            var t6 = new TaskEntity("Research", "Neue Technologien evaluieren", TaskEntity.TaskStatus.OFFEN, null, now.minusDays(7), now.minusDays(6));
+            var t7 = new TaskEntity("Refactoring", "Codequalität verbessern", TaskEntity.TaskStatus.IN_BEARBEITUNG, null, now.minusDays(2), now.minusDays(1));
+            var t8 = new TaskEntity("Brainstorming", "Ideen für nächstes Release sammeln", TaskEntity.TaskStatus.ERLEDIGT, null, now.minusDays(10), now.minusDays(8));
+            
             p1.addTask(t1);
             p1.addTask(t2);
 

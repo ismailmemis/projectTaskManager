@@ -41,19 +41,13 @@ public class TaskEntity {
     private OffsetDateTime updatedAt;
 
     @ManyToMany
-    @JoinTable(
-            name = "task_user",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserEntity> users = new HashSet<>();
 
     public TaskEntity() {
     }
 
-    public TaskEntity(String title, String description,
-                      TaskStatus status, ProjectEntity project,
-                      OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    public TaskEntity(String title, String description, TaskStatus status, ProjectEntity project, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
         this.title = title;
         this.description = description;
         this.status = status;

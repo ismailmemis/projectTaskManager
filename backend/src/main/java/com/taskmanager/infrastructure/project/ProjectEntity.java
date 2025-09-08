@@ -38,8 +38,7 @@ public class ProjectEntity {
     protected ProjectEntity() {
     }
 
-    public ProjectEntity(String name, String description,
-                         OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    public ProjectEntity(String name, String description, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
         this.name = name;
         this.description = description;
         this.createdAt = createdAt;

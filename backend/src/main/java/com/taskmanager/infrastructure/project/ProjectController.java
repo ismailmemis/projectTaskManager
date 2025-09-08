@@ -3,7 +3,6 @@ package com.taskmanager.infrastructure.project;
 import com.taskmanager.api.ProjectApi;
 import com.taskmanager.model.*;
 import com.taskmanager.service.ProjectService;
-import com.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,11 +12,9 @@ import java.util.List;
 public class ProjectController implements ProjectApi {
 
     private final ProjectService projectService;
-    private final TaskService taskService;
 
-    public ProjectController(ProjectService projectPort, TaskService taskService) {
+    public ProjectController(ProjectService projectPort) {
         this.projectService = projectPort;
-        this.taskService = taskService;
     }
 
     @Override
@@ -50,7 +47,6 @@ public class ProjectController implements ProjectApi {
     @Override
     public ResponseEntity<Void> deleteProject(Long id) {
         if (projectService.deleteById(id)) {
-            
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

@@ -72,6 +72,4 @@ public class TaskController implements TasksApi {
         TaskDTO updated = taskService.update(id, updateTaskDTO);
         return ResponseEntity.ok(updated);
     }
-
-
 }

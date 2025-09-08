@@ -33,9 +33,7 @@ public class ProjectService {
     public Optional<ProjectDTO> findById(Long id) {
         return projectRepository.findById(id).map(e -> {
             ProjectDTO dto = mapper.map(e, ProjectDTO.class);
-            List<TaskDTO> taskDtos = e.getTasks().stream()
-                    .map(taskEntity -> mapper.map(taskEntity, TaskDTO.class))
-                    .collect(Collectors.toList());
+            List<TaskDTO> taskDtos = e.getTasks().stream().map(taskEntity -> mapper.map(taskEntity, TaskDTO.class)).collect(Collectors.toList());
             dto.setTasks(taskDtos);
             return dto;
         });
@@ -72,8 +70,7 @@ public class ProjectService {
     }
 
     public ProjectDTO update(Long id, UpdateProjectDTO update) {
-        var entity = projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Project not found: " + id));
+        var entity = projectRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Project not found: " + id));
         if (update.getName() != null) entity.setName(update.getName());
         if (update.getDescription() != null) entity.setDescription(update.getDescription());
         var now = java.time.OffsetDateTime.now();
@@ -84,24 +81,18 @@ public class ProjectService {
 
     public boolean deleteById(Long id) {
         if (projectRepository.findById(id).isEmpty()) return false;
-        this.taskRepository.saveAll(
-                taskService.getTasksForProjectById(id).stream().map(
-                        taskEntity -> {
-                            taskEntity.setProject(null);
-                            return taskEntity;
-                        }
-                ).toList()
-        );
+        this.taskRepository.saveAll(taskService.getTasksForProjectById(id).stream().map(taskEntity -> {
+            taskEntity.setProject(null);
+            return taskEntity;
+        }).toList());
 
         projectRepository.deleteById(id);
         return true;
     }
 
     public TaskDTO createTaskInProject(Long projectId, Long taskId) {
-        var project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("Projekt nicht gefunden: " + projectId));
-        var task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("Aufgabe nicht gefunden: " + taskId));
+        var project = projectRepository.findById(projectId).orElseThrow(() -> new IllegalArgumentException("Projekt nicht gefunden: " + projectId));
+        var task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("Aufgabe nicht gefunden: " + taskId));
 
         if (task.getProject() != null && !task.getProject().getId().equals(projectId)) {
             throw new IllegalStateException("Aufgabe ist bereits einem anderen Projekt zugeordnet.");
