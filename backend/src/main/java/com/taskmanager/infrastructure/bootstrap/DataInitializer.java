@@ -1,11 +1,11 @@
 package com.taskmanager.infrastructure.bootstrap;
 
-import com.taskmanager.infrastructure.User.UserEntity;
-import com.taskmanager.infrastructure.User.UserRepository;
 import com.taskmanager.infrastructure.project.ProjectEntity;
 import com.taskmanager.infrastructure.project.ProjectRepository;
 import com.taskmanager.infrastructure.task.TaskEntity;
 import com.taskmanager.infrastructure.task.TaskRepository;
+import com.taskmanager.infrastructure.user.UserEntity;
+import com.taskmanager.infrastructure.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

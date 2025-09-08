@@ -1,7 +1,7 @@
 package com.taskmanager.infrastructure.task;
 
-import com.taskmanager.infrastructure.User.UserEntity;
 import com.taskmanager.infrastructure.project.ProjectEntity;
+import com.taskmanager.infrastructure.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

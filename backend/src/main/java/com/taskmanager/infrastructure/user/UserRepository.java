@@ -1,4 +1,4 @@
-package com.taskmanager.infrastructure.User;
+package com.taskmanager.infrastructure.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

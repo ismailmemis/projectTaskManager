@@ -1,9 +1,9 @@
 package com.taskmanager.service;
 
-import com.taskmanager.infrastructure.User.UserEntity;
-import com.taskmanager.infrastructure.User.UserRepository;
 import com.taskmanager.infrastructure.task.TaskEntity;
 import com.taskmanager.infrastructure.task.TaskRepository;
+import com.taskmanager.infrastructure.user.UserEntity;
+import com.taskmanager.infrastructure.user.UserRepository;
 import com.taskmanager.model.CreateTaskDTO;
 import com.taskmanager.model.TaskDTO;
 import com.taskmanager.model.UpdateTaskDTO;

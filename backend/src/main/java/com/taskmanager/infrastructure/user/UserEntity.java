@@ -1,4 +1,4 @@
-package com.taskmanager.infrastructure.User;
+package com.taskmanager.infrastructure.user;
 
 import com.taskmanager.infrastructure.task.TaskEntity;
 import jakarta.persistence.*;
