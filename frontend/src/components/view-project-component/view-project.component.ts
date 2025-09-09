@@ -72,6 +72,7 @@ export class ViewProjectComponent implements OnInit {
     }
 
     //rxjs
+    //Programmbibliothek für Reaktive Programmierung
     from(this.selectedTasks).pipe( // wandle array der ausgewählten taks in ein Observable um
       concatMap(task => { // für jeden Task seqquentiell eine payload generieren und request aufrufen
         if (!task.id) return of(null); //return Observable null wenn task keine id hat
